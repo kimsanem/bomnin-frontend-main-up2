@@ -1,0 +1,36 @@
+/* Moul Regular */
+@font-face {
+  font-family: 'Moul';
+  src: url('/fonts/Moul-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Kantumruy Pro Regular */
+@font-face {
+  font-family: 'KantumruyPro';
+  src: url('/fonts/KantumruyPro-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Kantumruy Pro Bold */
+@font-face {
+  font-family: 'KantumruyPro';
+  src: url('/fonts/KantumruyPro-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+html,
+body,
+#__nuxt {
+  font-family: 'KantumruyPro', 'Kantumruy Pro', sans-serif;
+}
+
+.font-kantumruy {
+  font-family: 'KantumruyPro', 'Kantumruy Pro', sans-serif;
+}
