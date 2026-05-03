@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch, onBeforeUnmount } from 'vue';
+import { ref, computed, watch, watchEffect, onBeforeUnmount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import QuizExplanationModal from '@/components/QuizExplanationModal.vue';
 
@@ -56,8 +56,20 @@ const { data: quizData, pending, error } = await useFetch(`${baseUrl}/quiz/${rou
             authToken.value = null;
             user.value = null;
             isLoginModalOpen.value = true;
+        } else if (response.status === 404) {
+            navigateTo('/quiz/no-questions', { replace: true });
         }
     },
+});
+
+// Backend 200 with no questions (e.g. ministry exists but ministry_questions is empty for it)
+// also goes to the no-questions page rather than the inline error block.
+watchEffect(() => {
+    if (quizData.value && (quizData.value.total_questions === 0
+            || !quizData.value.questions
+            || quizData.value.questions.length === 0)) {
+        navigateTo('/quiz/no-questions', { replace: true });
+    }
 });
 
 const rawQuestions      = ref([]);
@@ -388,7 +400,7 @@ onBeforeUnmount(() => {
         <div class="bg-white rounded-2xl border border-gray-300 shadow-sm p-3 px-6 flex flex-col justify-center dark:border-white/10 dark:bg-slate-900/85">
             <div class="flex justify-between items-center mb-3">
                 <span class="text-gray-800 font-bold text-sm md:text-[15px] tracking-wide dark:text-slate-100">
-                    {{ quizData?.category || 'ក្រសួង' }}
+                    {{ getKhmerTitle(slug) }}
                 </span>
                 <!-- REQ 4: Show cumulative score across all sessions -->
                 <span class="italic text-sm text-black md:text-[15px] dark:text-slate-200">

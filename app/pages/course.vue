@@ -775,13 +775,13 @@ const { isPlaying, currentTrackIndex, playlist, toggleMusic, nextTrack, prevTrac
                 កម្រិតទី {{ treeProgress.current_level }} ៖ {{ treeProgress.level_name }}
             </div>
             
-            <video 
-                :key="treeProgress.video_url" 
+            <video
+                :key="treeProgress.video_url"
                 :src="treeProgress.video_url"
-                autoplay 
-                loop 
-                muted 
-                playsinline 
+                autoplay
+                loop
+                muted
+                playsinline
                 class="absolute inset-0 w-full h-full object-cover z-10"
             >
                 <!-- <source :src="treeProgress.video_url" type="video/mp4" /> -->
