@@ -2,6 +2,10 @@
 import { ref, computed, watch, watchEffect, onBeforeUnmount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import QuizExplanationModal from '@/components/QuizExplanationModal.vue';
+import { sectionOneExamGroup } from '~/data/examSectionOne';
+import { sectionTwoExamGroup } from '~/data/examSectionTwo';
+import { sectionThreeExamGroup } from '~/data/examSectionThree';
+import { sectionFourExamGroup } from '~/data/examSectionFour';
 
 const route = useRoute();
 const router = useRouter();
@@ -20,15 +24,62 @@ const { open: openSubscribe } = useSubscribeModal();
 
 const getKhmerTitle = (slug) => {
     const titles = {
+        // Standard Subjects
         'geography': 'ភូមិសាស្ត្រ & ធនធាន', 'anthropology': 'នរវិទ្យា & ប្រជាសាស្ត្រ',
         'history': 'ប្រវត្តិសាស្ត្រ & អរិយធម៌', 'arts': 'សិល្បៈ & បេតិកភណ្ឌ',
         'rule-of-law': 'នីតិរដ្ឋ & ការគ្រប់គ្រង', 'religion': 'ជំនឿ & សាសនា (សីលធម៌)',
         'politics': 'នយោបាយ & យុទ្ធសាស្ត្រ', 'economy': 'សេដ្ឋកិច្ច & សង្គមកិច្ច',
         'agriculture': 'កសិកម្ម & ឧស្សាហកម្ម', 'science': 'វិទ្យាសាស្ត្រ & នវានុវត្តន៍',
-        'language': 'ភាសា & ទំនាក់ទំនង', 'logic': 'តក្កវិទ្យា & QCM'
+        'language': 'ភាសា & ទំនាក់ទំនង', 'logic': 'តក្កវិទ្យា & QCM',
+
+
+        // --- Section 1: វិស័យរដ្ឋបាល យុត្តិធម៌ និងសន្តិសុខ ---
+        'ocm': 'ទីស្តីការគណៈរដ្ឋមន្ត្រី',
+        'mfaic': 'ក្រសួងការបរទេស និងសហប្រតិបត្តិការអន្តរជាតិ',
+        'mond': 'ក្រសួងការពារជាតិ',
+        'moi': 'ក្រសួងមហាផ្ទៃ',
+        'mocs': 'ក្រសួងមុខងារសាធារណៈ (ERA)',
+        'moj': 'ក្រសួងយុត្តិធម៌',
+        'moins': 'ក្រសួងអធិការកិច្ច',
+        'acu': 'អង្គភាពប្រឆាំងអំពើពុករលួយ (ACU)',
+        'ssba': 'រដ្ឋលេខាធិការដ្ឋានកិច្ចការព្រំដែន',
+
+        // --- Section 2: វិស័យសេដ្ឋកិច្ច និងពាណិជ្ជកម្ម ---
+        'mef': 'ក្រសួងសេដ្ឋកិច្ច និងហិរញ្ញវត្ថុ',
+        'moc': 'ក្រសួងពាណិជ្ជកម្ម',
+        'molvt': 'ក្រសួងការងារ និងបណ្តុះបណ្តាលវិជ្ជាជីវៈ',
+        'mop': 'ក្រសួងផែនការ',
+        'mot': 'ក្រសួងទេសចរណ៍',
+        'misti': 'ក្រសួងឧស្សាហកម្ម វិទ្យាសាស្ត្រ បច្ចេកវិទ្យា និងនវានុវត្តន៍',
+        'maff': 'ក្រសួងកសិកម្ម រុក្ខាប្រមាញ់ និងនេសាទ',
+        'naa': 'អាជ្ញាធរសវនកម្មជាតិ',
+        'nbc': 'ធនាគារជាតិនៃកម្ពុជា',
+
+        // --- Section 3: វិស័យអប់រំ សុខាភិបាល និងសង្គមកិច្ច ---
+        'moeys': 'ក្រសួងអប់រំ យុវជន និងកីឡា',
+        'moh': 'ក្រសួងសុខាភិបាល',
+        'mosvy': 'ក្រសួងសង្គមកិច្ច អតីតយុទ្ធជន និងយុវនីតិសម្បទា',
+        'mowa': 'ក្រសួងកិច្ចការនារី',
+        'mocr': 'ក្រសួងធម្មការ និងសាសនា',
+        'mcfa': 'ក្រសួងវប្បធម៌ និងវិចិត្រសិល្បៈ',
+        'moinf': 'ក្រសួងពត័មាន',
+        'nec': 'គណៈកម្មាធិការជាតិរៀបចំការបោះឆ្នោត (គ.ជ.ប)',
+
+        // --- Section 4: វិស័យហេដ្ឋារចនាសម្ព័ន្ធ និងបរិស្ថាន ---
+        'mlmupc': 'ក្រសួងរៀបចំដែនដី នគរូបនីយកម្ម និងសំណង់',
+        'mpwt': 'ក្រសួងសាធារណការ និងដឹកជញ្ជូន',
+        'moenv': 'ក្រសួងបរិស្ថាន',
+        'mptc': 'ក្រសួងប្រៃសណីយ៍ និងទូរគមនាគមន៍',
+        'mowram': 'ក្រសួងធនធានទឹក និងឧតុនិយម',
+        'mme': 'ក្រសួងរ៉ែ និងថាមពល',
+        'mrd': 'ក្រសួងអភិវឌ្ឍន៍ជនបទ',
+        'ssca': 'រដ្ឋលេខាធិការដ្ឋានអាកាសចរស៊ីវិល'
     };
     return titles[slug] || 'សំណួរទូទៅ';
 };
+
+
+
 
 const isKhmerSubject = computed(() => !['language', 'logic'].includes(slug));
 
