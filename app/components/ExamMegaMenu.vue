@@ -81,11 +81,7 @@ useHead({
             <NuxtLink
               v-for="item in group.items"
               :key="item.slug"
-<<<<<<< HEAD
-              :to="item.slug ? `/quiz/${item.slug}` : '/quiz/no-questions'"
-=======
               :to="item.slug ? `/ministry/${item.slug}` : '/quiz/no-questions'"
->>>>>>> a52848c (resolve merge)
               class="group flex min-h-[5.5rem] items-center gap-3 rounded-2xl border border-slate-200/80 bg-white/80 p-3 shadow-sm shadow-slate-950/5 transition-all hover:-translate-y-0.5 hover:border-slate-100 hover:bg-white hover:shadow-lg hover:shadow-amber-500/5 dark:border-white/10 dark:bg-slate-900/70 dark:shadow-black/10 dark:hover:border-white/15 dark:hover:bg-white/5"
             >
               <span
