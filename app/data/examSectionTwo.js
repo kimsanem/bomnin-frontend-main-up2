@@ -3,47 +3,47 @@ export const sectionTwoExamGroup = {
   items: [
     {
       title: 'ក្រសួងសេដ្ឋកិច្ច និងហិរញ្ញវត្ថុ',
-      slug: '',
+      slug: 'mef',
       logo: '/ministry-logos/section-2/ក្រសួងសេដ្ឋកិច្ច និងហិរញ្ញវត្ថុ.png',
     },
     {
       title: 'ក្រសួងពាណិជ្ជកម្ម',
-      slug: '',
+      slug: 'moc',
       logo: '/ministry-logos/section-2/ក្រសួងពាណិជ្ជកម្ម.png',
     },
     {
       title: 'ក្រសួងការងារ និងបណ្តុះបណ្តាលវិជ្ជាជីវៈ',
-      slug: '',
+      slug: 'molvt',
       logo: '/ministry-logos/section-2/ក្រសួងការងារ និងបណ្តុះបណ្តាលវិជ្ជាជីវៈ.png',
     },
     {
       title: 'ក្រសួងផែនការ',
-      slug: '',
+      slug: 'mop',
       logo: '/ministry-logos/section-2/ក្រសួងផែនការ.png',
     },
     {
       title: 'ក្រសួងទេសចរណ៍',
-      slug: '',
+      slug: 'mot',
       logo: '/ministry-logos/section-2/ក្រសួងទេសចរណ៍.png',
     },
     {
       title: 'ក្រសួងឧស្សាហកម្ម វិទ្យាសាស្ត្រ បច្ចេកវិទ្យា និងនវានុវត្តន៍',
-      slug: '',
+      slug: 'misti',
       logo: '/ministry-logos/section-2/ក្រសួងឧស្សាហកម្ម វិទ្យាសាស្ត្រ បច្ចេកវិទ្យា និងនវានុវត្តន៍.png',
     },
     {
       title: 'ក្រសួងកសិកម្ម រុក្ខាប្រមាញ់ និងនេសាទ',
-      slug: '',
+      slug: 'maff',
       logo: '/ministry-logos/section-2/ក្រសួងកសិកម្ម រុក្ខាប្រមាញ់ និងនេសាទ.png',
     },
     {
       title: 'អាជ្ញាធរសវនកម្មជាតិ',
-      slug: '',
+      slug: 'naa',
       logo: '/ministry-logos/section-2/អាជ្ញាធរសវនកម្មជាតិ.png',
     },
     {
       title: 'ធនាគារជាតិនៃកម្ពុជា',
-      slug: '',
+      slug: 'nbc',
       logo: '/ministry-logos/section-2/ធនាគារជាតិនៃកម្ពុជា.png',
     },
   ],

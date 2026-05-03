@@ -133,7 +133,7 @@ const menuItems = [
   { name: 'អនុវត្តប្រចាំថ្ងៃ', id: 'daily', to: '/daily' },
   { name: 'ពិន្ទុសរុប', id: 'weekly', to: '/weekly' },
   { name: 'ប្រភពគោល', id: 'source', to: '/source' },
-  
+
 ];
 
 const isMenuItemActive = (to) => route.path === to;

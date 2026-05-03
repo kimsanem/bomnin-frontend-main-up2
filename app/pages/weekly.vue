@@ -22,7 +22,7 @@ const fetchLeaderboard = async () => {
     isLoading.value = true;
     fetchError.value = null;
     try {
-        const response = await $fetch(`${baseUrl}/leaderboard/weekly`, {
+        const response = await $fetch(`${baseUrl}/leaderboard/monthly`, {
             headers: {
                 'Accept': 'application/json'
             }
@@ -47,7 +47,7 @@ const fetchAllLeaderboard = async () => {
     if (allUsers.value.length > 0 || isLoadingAll.value) return;
     isLoadingAll.value = true;
     try {
-        const response = await $fetch(`${baseUrl}/leaderboard/weekly`, {
+        const response = await $fetch(`${baseUrl}/leaderboard/monthly`, {
             query: { all: 1 },
             headers: { 'Accept': 'application/json' }
         });

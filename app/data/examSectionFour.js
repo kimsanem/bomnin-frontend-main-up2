@@ -3,42 +3,42 @@ export const sectionFourExamGroup = {
   items: [
     {
       title: 'ក្រសួងរៀបចំដែនដី នគរូបនីយកម្ម និងសំណង់',
-      slug: '',
+      slug: 'mlmupc',
       logo: '/ministry-logos/section-4/ក្រសួងរៀបចំដែនដី នគរូបនីយកម្ម និងសំណង់.png'
     },
     {
       title: 'ក្រសួងសាធារណការ និងដឹកជញ្ជូន',
-      slug: '',
+      slug: 'mpwt',
       logo: '/ministry-logos/section-4/ក្រសួងសាធារណការ និងដឹកជញ្ជូន.png',
     },
     {
       title: 'ក្រសួងបរិស្ថាន',
-      slug: '',
+      slug: 'moenv',
       logo: '/ministry-logos/section-4/ក្រសួងបរិស្ថាន.png',
     },
     {
       title: 'ក្រសួងប្រៃសណីយ៍ និងទូរគមនាគមន៍',
-      slug: '',
+      slug: 'mptc',
       logo: '/ministry-logos/section-4/ក្រសួងប្រៃសណីយ៍ និងទូរគមនាគមន៍.png',
     },
     {
       title: 'ក្រសួងធនធានទឹក និងឧតុនិយម',
-      slug: '',
+      slug: 'mowram',
       logo: '/ministry-logos/section-4/ក្រសួងធនធានទឹក និងឧតុនិយម.png',
     },
     {
       title: 'ក្រសួងរ៉ែ និងថាមពល',
-      slug: '',
+      slug: 'mme',
       logo: '/ministry-logos/section-4/ក្រសួងរ៉ែ និងថាមពល.png',
     },
     {
       title: 'ក្រសួងអភិវឌ្ឍន៍ជនបទ',
-      slug: '',
+      slug: 'mrd',
       logo: '/ministry-logos/section-4/ក្រសួងអភិវឌ្ឍន៍ជនបទ.png',
     },
     {
       title: 'រដ្ឋលេខាធិការដ្ឋានអាកាសចរស៊ីវិល',
-      slug: '',
+      slug: 'ssca',
       logo: '/ministry-logos/section-4/រដ្ឋលេខាធិការដ្ឋានអាកាសចរស៊ីវិល.png',
     },
   ],
