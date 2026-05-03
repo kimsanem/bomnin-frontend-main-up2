@@ -1,4 +1,7 @@
 <script setup>
+useHead({
+  title: 'អនុវត្តប្រចាំថ្ងៃ',
+});
 import { ref, computed, watch, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import QuizExplanationModal from '@/components/QuizExplanationModal.vue';

@@ -1,4 +1,7 @@
 ﻿<script setup>
+useHead({
+  title: 'ប្រភពគោល',
+});
 import { ref, computed } from 'vue';
 
 const activeCategory = ref('g1');

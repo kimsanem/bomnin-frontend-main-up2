@@ -1,4 +1,7 @@
 <script setup>
+useHead({
+  title: 'ពិន្ទុសរុប',
+});
 import { ref, computed, nextTick, onMounted, onUnmounted, watch } from 'vue';
 
 // --- 1. STATE ---

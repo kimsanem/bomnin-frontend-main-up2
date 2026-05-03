@@ -1,4 +1,7 @@
 <script setup>
+useHead({
+  title: 'ទំព័រដើម',
+});
 import { ref, onMounted, computed, watchEffect, inject } from 'vue';
 import { useRouter } from 'vue-router'; 
 
