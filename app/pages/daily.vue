@@ -2,7 +2,7 @@
 useHead({
   title: 'អនុវត្តប្រចាំថ្ងៃ',
 });
-import { ref, computed, watch, onBeforeUnmount } from 'vue';
+import { ref, computed, watch, onBeforeUnmount, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import QuizExplanationModal from '@/components/QuizExplanationModal.vue';
 
@@ -52,7 +52,34 @@ const resultSnapshot = ref({
 // - sessionScore: ចំនួនឆ្លើយត្រូវ — ប្រើសម្រាប់ Score
 const sessionAttempted = ref(0);
 const sessionScore = ref(0);
-const dailyLimit = ref(100); // នឹងប្រែប្រួលទៅតាម API (50 ឬ 100)
+const dailyLimit = ref(100);
+
+// Countdown to next Asia/Phnom_Penh midnight (UTC+7, no DST) for the
+// "completed — try again in 24h" screen. Ticks once per second on the client.
+const PP_OFFSET_SECONDS = 7 * 3600;
+const nowMs = ref(Date.now());
+let countdownInterval = null;
+const startCountdown = () => {
+    if (!import.meta.client || countdownInterval) return;
+    nowMs.value = Date.now();
+    countdownInterval = setInterval(() => { nowMs.value = Date.now(); }, 1000);
+};
+const stopCountdown = () => {
+    if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; }
+};
+const secondsUntilReset = computed(() => {
+    const nowS = Math.floor(nowMs.value / 1000);
+    const ppDay = Math.floor((nowS + PP_OFFSET_SECONDS) / 86400);
+    const nextResetS = (ppDay + 1) * 86400 - PP_OFFSET_SECONDS;
+    return Math.max(0, nextResetS - nowS);
+});
+const formattedResetCountdown = computed(() => {
+    const s = secondsUntilReset.value;
+    const h = String(Math.floor(s / 3600)).padStart(2, '0');
+    const m = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
+    const sec = String(s % 60).padStart(2, '0');
+    return `${h}:${m}:${sec}`;
+});
 
 const shuffleArray = (array) => {
   const arr = [...array];
@@ -63,25 +90,31 @@ const shuffleArray = (array) => {
   return arr;
 };
 
-// 🔥 រៀបចំ Data ពេលទាញយកពី API មកដល់
+// Only sync sessionAttempted / sessionScore from the backend on the *initial*
+// load. Mid-session, the frontend's optimistic counter is canonical: each
+// answered question increments it locally. If we re-synced on every batch
+// fetch, a slow /save-progress (still in flight when /daily-quiz GET runs)
+// would make today_answered lag the local count and the UI would jump
+// backwards — which is the "back to question 1" bug.
+const hasSyncedFromBackend = ref(false);
+
 watch(apiResponse, (newData) => {
-  if (newData) {
-      // កំណត់ទិន្នន័យ Progress តាម Backend បោះមក (today_answered = COUNT ត្រូវ+ខុស)
+  if (!newData) return;
+
+  if (!hasSyncedFromBackend.value) {
       sessionAttempted.value = newData.today_answered || 0;
       sessionScore.value = newData.current_score || 0;
-      dailyLimit.value = newData.daily_limit || (isSubscribed.value ? 100 : 50);
+      hasSyncedFromBackend.value = true;
+  }
+  dailyLimit.value = newData.daily_limit || 100;
 
-      if (newData.limit_reached || newData.requires_subscription) {
-          isLimitReached.value = true;
-          if (newData.requires_subscription) {
-              setTimeout(() => openSubscribe(), 500); 
-          }
-      } else if (newData.questions && newData.questions.length > 0) {
-          rawQuestions.value = newData.questions;
-          pendingQuestions.value = shuffleArray(newData.questions);
-      } else {
-          isFinished.value = true;
-      }
+  if (newData.limit_reached) {
+      isLimitReached.value = true;
+  } else if (newData.questions && newData.questions.length > 0) {
+      rawQuestions.value = newData.questions;
+      pendingQuestions.value = shuffleArray(newData.questions);
+  } else {
+      isFinished.value = true;
   }
 }, { immediate: true });
 
@@ -214,9 +247,8 @@ const handleModalNext = async () => {
 
         if (pendingQuestions.value.length === 0) {
             await fetchMoreQuestions();
-        } else {
-            resetQuestionState();
         }
+        resetQuestionState();
     }, 300);
 };
 
@@ -271,7 +303,13 @@ watch(showResultModal, (isOpen) => {
 });
 
 watch(isSessionComplete, (isComplete) => {
-    if (!isComplete || !hasSessionStarted.value || hasShownCompletionModal.value) return;
+    if (!isComplete) {
+        stopCountdown();
+        return;
+    }
+    startCountdown();
+
+    if (!hasSessionStarted.value || hasShownCompletionModal.value) return;
 
     stopTimer();
     resultSnapshot.value = {
@@ -280,10 +318,15 @@ watch(isSessionComplete, (isComplete) => {
     };
     showResultModal.value = true;
     hasShownCompletionModal.value = true;
+}, { immediate: true });
+
+onMounted(() => {
+    if (isSessionComplete.value) startCountdown();
 });
 
 onBeforeUnmount(() => {
     stopTimer();
+    stopCountdown();
 });
 
 const getOptionBoxClass = (key) => {
@@ -349,25 +392,26 @@ const getOptionTextClass = (key) => {
       </div>
 
       <div v-else-if="isLimitReached || isFinished || (!pending && !error && rawQuestions.length === 0)" class="flex flex-1 flex-col items-center justify-center text-center bg-white rounded-3xl shadow-sm p-8 border border-gray-100 animate-fade-in dark:border-white/10 dark:bg-slate-900/85">
-         <div class="w-20 h-20 bg-violet-100 rounded-full flex items-center justify-center mx-auto mb-4 dark:bg-violet-400/15">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+         <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4 dark:bg-emerald-400/15">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-emerald-600 dark:text-emerald-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
          </div>
-         
-         <template v-if="isSubscribed">
-             <h1 class="text-2xl font-bold mb-2 text-gray-800 dark:text-slate-100">កូតាប្រចាំថ្ងៃត្រូវបានបញ្ចប់!</h1>
-             <p class="text-gray-600 mb-6 dark:text-slate-300">អ្នកបានអនុវត្តពេញកូតាសម្រាប់ថ្ងៃនេះរួចរាល់ហើយ។ សូមរង់ចាំបន្តការអនុវត្តនៅថ្ងៃស្អែក។</p>
-             <button @click="router.push('/')" class="bg-violet-600 text-white px-8 py-3 rounded-full font-bold shadow-md hover:bg-violet-700 transition-colors">ត្រឡប់ទៅទំព័រដើម</button>
-         </template>
-         
-         <template v-else>
-             <h1 class="text-2xl font-bold mb-2 text-gray-800 dark:text-slate-100">អស់កូតាឥតគិតថ្លៃហើយ!</h1>
-             <p class="text-gray-600 mb-6 dark:text-slate-300">អ្នកបានអនុវត្តអស់កូតាប្រចាំថ្ងៃហើយ។ សូមទិញគម្រោង (Subscribe) ដើម្បីដោះសោរសិទ្ធិអនុវត្តរហូតដល់ ១០០ សំណួរជារៀងរាល់ថ្ងៃ។</p>
-             <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                 <button @click="router.push('/')" class="bg-gray-200 text-gray-800 px-6 py-2.5 rounded-full shadow-sm hover:bg-gray-300 dark:bg-white/10 dark:text-slate-100 dark:hover:bg-white/15">ត្រឡប់ទៅទំព័រដើម</button>
-                 <button @click="openSubscribe" class="bg-violet-600 text-white px-6 py-2.5 rounded-full shadow-md hover:bg-violet-700">ទិញគម្រោងឥឡូវនេះ</button>
-             </div>
-         </template>
 
+         <h1 class="text-2xl font-bold mb-2 text-gray-800 dark:text-slate-100">បញ្ចប់ការអនុវត្តប្រចាំថ្ងៃ!</h1>
+         <p class="text-gray-600 mb-2 dark:text-slate-300">
+             អ្នកបានឆ្លើយ <span class="font-bold text-violet-600 dark:text-violet-300">{{ toKhmerNumeral(sessionAttempted) }}/{{ toKhmerNumeral(dailyLimit) }}</span>
+             — ពិន្ទុប្រចាំថ្ងៃ <span class="font-bold text-emerald-600 dark:text-emerald-300">{{ sessionScore }}</span>
+         </p>
+         <p class="text-gray-500 mb-4 dark:text-slate-400">សំណួរថ្មីនឹងបន្តក្នុងរយៈពេល ២៤ ម៉ោងទៀត</p>
+
+         <div class="mb-6 inline-flex items-center gap-2 rounded-2xl border border-violet-200 bg-violet-50 px-5 py-3 dark:border-violet-300/20 dark:bg-violet-400/10">
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-violet-500 dark:text-violet-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                 <circle cx="12" cy="12" r="9" />
+                 <path d="M12 7v5l3 2" />
+             </svg>
+             <span class="font-mono text-2xl font-black tracking-[0.16em] text-violet-700 dark:text-violet-200 tabular-nums">{{ formattedResetCountdown }}</span>
+         </div>
+
+         <button @click="router.push('/')" class="bg-violet-600 text-white px-8 py-3 rounded-full font-bold shadow-md hover:bg-violet-700 transition-colors">ត្រឡប់ទៅទំព័រដើម</button>
       </div>
 
       <div v-else-if="!isFinished && !isLimitReached && currentQ" class="space-y-4 py-6 md:py-8 animate-fade-in">

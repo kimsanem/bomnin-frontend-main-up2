@@ -82,6 +82,13 @@ const sessionScore     = ref(0);  // total correct across all visits
 const sessionCorrectCount = ref(0);  // correct in this session only
 const sessionWrongCount   = ref(0);  // wrong in this session only
 
+// Pause every N answers and ask the user to continue or go home.
+// `lastPauseShownAt` is seeded from the persisted answered_count so a refresh
+// at e.g. 31/100 does not immediately re-fire the 30-popup.
+const PAUSE_EVERY = 15;
+const pauseModalOpen = ref(false);
+const lastPauseShownAt = ref(0);
+
 
 const totalCatQuestions = computed(() => quizData.value?.total_questions || 100);
 
@@ -160,8 +167,9 @@ const toggleTimerPause = () => {
 watch(quizData, (newData) => {
     if (newData) {
         // Use the new naming from our Controller update
-        sessionAttempted.value = newData.answered_count || 0; 
+        sessionAttempted.value = newData.answered_count || 0;
         sessionScore.value     = newData.current_score || 0;
+        lastPauseShownAt.value = Math.floor(sessionAttempted.value / PAUSE_EVERY) * PAUSE_EVERY;
 
         if (newData.limit_reached || newData.requires_subscription) {
             isLimitReached.value = true;
@@ -236,7 +244,7 @@ const handleModalNext = async () => {
 
     setTimeout(async () => {
         // 🔥 UPDATE UI HERE: Only increase after clicking Next
-        sessionAttempted.value++; 
+        sessionAttempted.value++;
         if (isCorrectAnswer.value) {
             sessionScore.value++;
         }
@@ -249,7 +257,35 @@ const handleModalNext = async () => {
         } else {
             resetQuestionState();
         }
+
+        // Every 15 answers: ask user to continue or go home. Skip if the
+        // session already ended (limit reached / finished) so we don't stack
+        // a pause popup over the completion screen.
+        if (
+            !isLimitReached.value &&
+            !isFinished.value &&
+            sessionAttempted.value > lastPauseShownAt.value &&
+            sessionAttempted.value % PAUSE_EVERY === 0
+        ) {
+            lastPauseShownAt.value = sessionAttempted.value;
+            pauseTimer();
+            pauseModalOpen.value = true;
+        }
     }, 300);
+};
+
+const continueAfterPause = () => {
+    pauseModalOpen.value = false;
+    if (currentQ.value && hasSessionStarted.value && isTimerPaused.value) {
+        resumeTimer();
+    }
+};
+
+const goHomeFromPause = () => {
+    pauseModalOpen.value = false;
+    stopTimer();
+    isTimerPaused.value = false;
+    router.push('/');
 };
 
 const fetchMoreQuestions = async () => {
@@ -525,6 +561,47 @@ onBeforeUnmount(() => {
           @stop="handleModalStop"
       />
 
+      <Teleport to="body">
+        <Transition name="pause-pop">
+          <div
+            v-if="pauseModalOpen"
+            class="fixed inset-0 z-[1100] flex items-center justify-center bg-slate-950/55 p-4 backdrop-blur-sm"
+          >
+            <div class="relative w-full max-w-md overflow-hidden rounded-3xl border border-white/40 bg-white/85 p-6 shadow-[0_30px_120px_rgba(15,23,42,0.28)] backdrop-blur-2xl dark:border-white/10 dark:bg-slate-900/90 md:p-7">
+              <div class="mb-4 flex items-center gap-3">
+                <span class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-400/15 text-emerald-600 dark:text-emerald-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="9" />
+                    <path d="M9 10v4M15 10v4" />
+                  </svg>
+                </span>
+                <div>
+                  <p class="text-xs font-black uppercase tracking-[0.28em] text-emerald-600/80 dark:text-emerald-300/80">សម្រាកបន្តិច</p>
+                  <h3 class="mt-1 font-kantumruy text-xl font-black text-slate-900 dark:text-white">បានឆ្លើយ {{ toKhmerNumeral(sessionAttempted) }} សំណួរហើយ</h3>
+                </div>
+              </div>
+              <p class="mb-6 font-kantumruy text-sm text-slate-600 dark:text-slate-300">
+                តើអ្នកចង់បន្តធ្វើតេស្ត ឬ ត្រឡប់ទៅទំព័រដើម?
+              </p>
+              <div class="flex flex-col gap-3 sm:flex-row">
+                <button
+                  @click="goHomeFromPause"
+                  class="flex-1 rounded-2xl border border-slate-300/70 bg-white/70 px-5 py-3 font-kantumruy text-sm font-bold text-slate-700 transition hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10"
+                >
+                  ត្រឡប់ទៅទំព័រដើម
+                </button>
+                <button
+                  @click="continueAfterPause"
+                  class="flex-1 rounded-2xl bg-[#3eb36a] px-5 py-3 font-kantumruy text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition hover:bg-[#329858]"
+                >
+                  បន្តធ្វើតេស្ត
+                </button>
+              </div>
+            </div>
+          </div>
+        </Transition>
+      </Teleport>
+
     </div>
   </div>
 </template>
@@ -534,5 +611,13 @@ onBeforeUnmount(() => {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-8px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+.pause-pop-enter-active, .pause-pop-leave-active { transition: opacity 0.22s ease; }
+.pause-pop-enter-active > div, .pause-pop-leave-active > div {
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease;
+}
+.pause-pop-enter-from, .pause-pop-leave-to { opacity: 0; }
+.pause-pop-enter-from > div, .pause-pop-leave-to > div {
+  opacity: 0; transform: scale(0.94) translateY(10px);
 }
 </style>

@@ -2144,22 +2144,26 @@ const handlePdfClick = async (item) => {
         alert("សូមចូលគណនី (Login) ជាមុនសិន!");
         return;
     }
-    
-    // 🔥 SPECIAL CASE (only id:8 or any externalUrl)
+
     if (item.externalUrl) {
         window.open(item.externalUrl, '_blank');
         return;
     }
 
-    // ❌ prevent null crash
     if (!item.file) {
         alert("No file available");
         return;
     }
 
-    // ដកសញ្ញា "/" ខាងមុខចេញ ដើម្បីឱ្យត្រូវ Path ក្នុង R2
     const cleanPath = item.file.startsWith('/') ? item.file.substring(1) : item.file;
-    
+
+    // Mobile browsers (iOS Safari especially) treat window.open after an
+    // await as a programmatic popup and block it because the user gesture
+    // has already been "consumed". Open the tab synchronously here with
+    // about:blank, then redirect it once the signed URL returns. If the
+    // popup was blocked anyway, fall back to navigating the current tab.
+    const popup = window.open('about:blank', '_blank');
+
     try {
         const response = await $api('/get-secure-media', {
             method: 'POST',
@@ -2167,9 +2171,16 @@ const handlePdfClick = async (item) => {
         });
 
         if (response.success && response.url) {
-            window.open(response.url, '_blank'); 
+            if (popup && !popup.closed) {
+                popup.location.href = response.url;
+            } else {
+                window.location.href = response.url;
+            }
+        } else if (popup && !popup.closed) {
+            popup.close();
         }
     } catch (error) {
+        if (popup && !popup.closed) popup.close();
         alert("មិនអាចបើកឯកសារនេះបានទេ។");
     }
 };
