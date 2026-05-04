@@ -17,7 +17,8 @@ const categories = [
     { id: 'g1', name: 'ខេមរវិទ្យា និង មនុស្សសាស្ត្រ' },
     { id: 'g2', name: 'វិទ្យាសាស្ត្រនយោបាយ និង រដ្ឋបាល' },
     { id: 'g3', name: 'វិទ្យាសាស្ត្រអនុវត្ត និង ជំនាញវិជ្ជាជីវៈ' },
-    { id: 'g4', name: 'វិញ្ញាសារធ្លាប់ប្រឡង'}
+    { id: 'g4', name: '២៨ ក្រសួង ៦ ស្ថាប័ន'},
+    { id: 'g5', name: 'វិញ្ញាសារធ្លាប់ប្រឡង'}
 ];
 
 
@@ -2131,7 +2132,7 @@ const setCategory = (id) => {
     activeCategory.value = id;
 };
 
-const isPremiumCategory = (id) => id === 'g4';
+const isPremiumCategory = (id) => id === 'g5';
 
 const getCoverUrl = (path) => {
     const cleanPath = path.startsWith('/') ? path.substring(1) : path;
