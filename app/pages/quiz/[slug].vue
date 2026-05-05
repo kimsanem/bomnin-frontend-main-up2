@@ -82,6 +82,11 @@ const resultSnapshot = ref({
     attempted: 0,
     timeSpent: 0,
 });
+const checkpointSnapshot = ref({
+    score: 0,
+    attempted: 0,
+    timeSpent: 0,
+});
 
 // REQ 4: Session counters restored from backend
 const sessionAttempted = ref(0);  // total attempted across all visits to this slug
@@ -121,13 +126,14 @@ const progressPercent = computed(() =>
 );
 const formattedElapsedTime = computed(() => formatDuration(elapsedSeconds.value));
 const formattedResultTime = computed(() => formatDuration(resultSnapshot.value.timeSpent));
+const formattedCheckpointTime = computed(() => formatDuration(checkpointSnapshot.value.timeSpent));
 const resultAccuracy = computed(() => {
     if (!resultSnapshot.value.attempted) return 0;
     return Math.round((resultSnapshot.value.score / resultSnapshot.value.attempted) * 100);
 });
 const checkpointAccuracy = computed(() => {
-    if (!sessionAttempted.value) return 0;
-    return Math.round((sessionScore.value / sessionAttempted.value) * 100);
+    if (!checkpointSnapshot.value.attempted) return 0;
+    return Math.round((checkpointSnapshot.value.score / checkpointSnapshot.value.attempted) * 100);
 });
 const isFastRun = computed(() => resultSnapshot.value.timeSpent > 0 && resultSnapshot.value.timeSpent <= 75);
 
@@ -296,6 +302,11 @@ const handleModalNext = async () => {
             sessionAttempted.value % PAUSE_EVERY === 0
         ) {
             lastPauseShownAt.value = sessionAttempted.value;
+            checkpointSnapshot.value = {
+                score: sessionScore.value,
+                attempted: sessionAttempted.value,
+                timeSpent: elapsedSeconds.value,
+            };
             pauseTimer('checkpoint');
             pauseModalOpen.value = true;
         }
@@ -604,8 +615,8 @@ onBeforeUnmount(() => {
 
       <QuizResultModal
           :is-open="pauseModalOpen"
-          :score="`${sessionScore} / ${sessionAttempted}`"
-          :time-spent="formattedElapsedTime"
+          :score="`${checkpointSnapshot.score} / ${checkpointSnapshot.attempted}`"
+          :time-spent="formattedCheckpointTime"
           :accuracy="checkpointAccuracy"
           :dismissible="false"
           @close="continueAfterPause()"
