@@ -5,6 +5,7 @@ useHead({
 import { ref, computed, watch, onBeforeUnmount, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import QuizExplanationModal from '@/components/QuizExplanationModal.vue';
+import QuizResultModal from '@/components/QuizResultModal.vue';
 
 const router = useRouter();
 const authToken = useCookie('auth_token');
@@ -35,12 +36,14 @@ const selectedAnswer = ref(null);
 const isAnswerChecked = ref(false); 
 const showExplanationModal = ref(false);
 const showResultModal = ref(false);
+const debugShowResultModal = ref(false);
 const elapsedSeconds = ref(0);
 const questionTimerStartedAt = ref(null);
 const timerInterval = ref(null);
 const isTimerPaused = ref(false);
 const hasSessionStarted = ref(false);
 const hasShownCompletionModal = ref(false);
+const pauseReasons = new Set();
 const averageQuestionTime = 75;
 const resultSnapshot = ref({
     score: 0,
@@ -126,6 +129,11 @@ const formattedElapsedTime = computed(() => formatDuration(elapsedSeconds.value)
 const formattedResultTime = computed(() => formatDuration(resultSnapshot.value.timeSpent));
 const isFastRun = computed(() => resultSnapshot.value.timeSpent > 0 && resultSnapshot.value.timeSpent <= averageQuestionTime);
 const isSessionComplete = computed(() => isLimitReached.value || isFinished.value || (!pending.value && !error.value && rawQuestions.value.length === 0));
+const isResultModalVisible = computed(() => debugShowResultModal.value || showResultModal.value);
+const resultAccuracy = computed(() => {
+    if (!sessionAttempted.value) return 0;
+    return Math.round((resultSnapshot.value.score / sessionAttempted.value) * 100);
+});
 
 const isEnglishSubject = ref(false); 
 
@@ -171,25 +179,32 @@ const startTimer = (reset = false) => {
     }, 1000);
 };
 
-const pauseTimer = () => {
-    if (!timerInterval.value) return;
+const pauseTimer = (reason = 'manual') => {
+    pauseReasons.add(reason);
     stopTimer();
-    isTimerPaused.value = true;
+    if (reason === 'manual') {
+        isTimerPaused.value = true;
+    }
 };
 
-const resumeTimer = () => {
-    if (!hasSessionStarted.value || !isTimerPaused.value) return;
+const resumeTimer = (reason = 'manual') => {
+    pauseReasons.delete(reason);
+
+    if (reason === 'manual') {
+        isTimerPaused.value = false;
+    }
+
+    if (!hasSessionStarted.value || pauseReasons.size > 0) return;
     questionTimerStartedAt.value = Date.now() - (elapsedSeconds.value * 1000);
-    isTimerPaused.value = false;
     startTimer();
 };
 
 const toggleTimerPause = () => {
     if (isTimerPaused.value) {
-        resumeTimer();
+        resumeTimer('manual');
         return;
     }
-    pauseTimer();
+    pauseTimer('manual');
 };
 
 const normalizedCorrectAnswer = computed(() => {
@@ -297,8 +312,16 @@ watch(currentQ, (newQuestion) => {
 
 watch(showResultModal, (isOpen) => {
     if (isOpen) {
-        stopTimer();
+        pauseTimer('result');
         isTimerPaused.value = false;
+    }
+});
+
+watch(showExplanationModal, (isOpen) => {
+    if (isOpen) {
+        pauseTimer('explanation');
+    } else {
+        resumeTimer('explanation');
     }
 });
 
@@ -391,7 +414,7 @@ const getOptionTextClass = (key) => {
          </template>
       </div>
 
-      <div v-else-if="isLimitReached || isFinished || (!pending && !error && rawQuestions.length === 0)" class="flex flex-1 flex-col items-center justify-center text-center bg-white rounded-3xl shadow-sm p-8 border border-gray-100 animate-fade-in dark:border-white/10 dark:bg-slate-900/85">
+      <div v-else-if="(isLimitReached || isFinished || (!pending && !error && rawQuestions.length === 0)) && !isResultModalVisible" class="flex flex-1 flex-col items-center justify-center text-center bg-white rounded-3xl shadow-sm p-8 border border-gray-100 animate-fade-in dark:border-white/10 dark:bg-slate-900/85">
          <div class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4 dark:bg-emerald-400/15">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-emerald-600 dark:text-emerald-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
          </div>
@@ -530,7 +553,7 @@ const getOptionTextClass = (key) => {
       <Teleport to="body">
         <Transition name="results-pop">
           <div
-            v-if="showResultModal"
+            v-if="false && showResultModal"
             class="fixed inset-0 z-[1100] flex items-center justify-center bg-slate-950/55 p-4 backdrop-blur-sm"
             @click.self="showResultModal = false"
           >
@@ -622,6 +645,17 @@ const getOptionTextClass = (key) => {
           </div>
         </Transition>
       </Teleport>
+
+      <QuizResultModal
+        :is-open="isResultModalVisible"
+        :score="`${resultSnapshot.score} / ${sessionAttempted}`"
+        :time-spent="formattedResultTime"
+        :accuracy="resultAccuracy"
+        :is-fast-run="isFastRun"
+        @close="debugShowResultModal = false; showResultModal = false"
+        @continue="debugShowResultModal = false; showResultModal = false"
+        @home="router.push('/')"
+      />
 
     </div>
   </div>

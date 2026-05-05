@@ -3,6 +3,7 @@ useHead({
   title: 'ប្រភពគោល',
 });
 import { ref, computed } from 'vue';
+import { sourceG4G5Resources } from '~/data/source-g4-g5';
 
 const activeCategory = ref('g1');
 const searchQuery = ref('');
@@ -22,7 +23,7 @@ const categories = [
 ];
 
 
-const resources = [
+const coreResources = [
         // group 1
     {
         id: 1,
@@ -2118,6 +2119,8 @@ const resources = [
 
 ];
 
+const resources = [...coreResources, ...sourceG4G5Resources];
+
 
 const filteredResources = computed(() => {
     return resources.filter(item => {
@@ -2132,6 +2135,7 @@ const setCategory = (id) => {
     activeCategory.value = id;
 };
 
+// check if it is G5
 const isPremiumCategory = (id) => id === 'g5';
 
 const getCoverUrl = (path) => {

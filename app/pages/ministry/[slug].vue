@@ -2,6 +2,8 @@
 import { ref, computed, watch, watchEffect, onBeforeUnmount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import QuizExplanationModal from '@/components/QuizExplanationModal.vue';
+import QuizPauseModal from '@/components/QuizPauseModal.vue';
+import QuizResultModal from '@/components/QuizResultModal.vue';
 import { sectionOneExamGroup } from '~/data/examSectionOne';
 import { sectionTwoExamGroup } from '~/data/examSectionTwo';
 import { sectionThreeExamGroup } from '~/data/examSectionThree';
@@ -131,11 +133,19 @@ const isLimitReached    = ref(false);
 const selectedAnswer    = ref(null);
 const isAnswerChecked   = ref(false);
 const showExplanationModal = ref(false);
+const showResultModal = ref(false);
 const elapsedSeconds = ref(0);
 const questionTimerStartedAt = ref(null);
 const timerInterval = ref(null);
 const isTimerPaused = ref(false);
 const hasSessionStarted = ref(false);
+const pauseReasons = new Set();
+const hasShownResultModal = ref(false);
+const resultSnapshot = ref({
+    score: 0,
+    attempted: 0,
+    timeSpent: 0,
+});
 
 // REQ 4: Session counters restored from backend
 const sessionAttempted = ref(0);  // total attempted across all visits to this slug
@@ -174,6 +184,12 @@ const progressPercent = computed(() =>
         : 0
 );
 const formattedElapsedTime = computed(() => formatDuration(elapsedSeconds.value));
+const formattedResultTime = computed(() => formatDuration(resultSnapshot.value.timeSpent));
+const resultAccuracy = computed(() => {
+    if (!resultSnapshot.value.attempted) return 0;
+    return Math.round((resultSnapshot.value.score / resultSnapshot.value.attempted) * 100);
+});
+const isFastRun = computed(() => resultSnapshot.value.timeSpent > 0 && resultSnapshot.value.timeSpent <= 75);
 
 const formatDuration = (seconds) => {
     const safeSeconds = Math.max(0, Number(seconds) || 0);
@@ -206,25 +222,32 @@ const startTimer = (reset = false) => {
     }, 1000);
 };
 
-const pauseTimer = () => {
-    if (!timerInterval.value) return;
+const pauseTimer = (reason = 'manual') => {
+    pauseReasons.add(reason);
     stopTimer();
-    isTimerPaused.value = true;
+    if (reason === 'manual') {
+        isTimerPaused.value = true;
+    }
 };
 
-const resumeTimer = () => {
-    if (!hasSessionStarted.value || !isTimerPaused.value) return;
+const resumeTimer = (reason = 'manual') => {
+    pauseReasons.delete(reason);
+
+    if (reason === 'manual') {
+        isTimerPaused.value = false;
+    }
+
+    if (!hasSessionStarted.value || pauseReasons.size > 0) return;
     questionTimerStartedAt.value = Date.now() - (elapsedSeconds.value * 1000);
-    isTimerPaused.value = false;
     startTimer();
 };
 
 const toggleTimerPause = () => {
     if (isTimerPaused.value) {
-        resumeTimer();
+        resumeTimer('manual');
         return;
     }
-    pauseTimer();
+    pauseTimer('manual');
 };
 // REQ 4: Restore session state when data loads
 watch(quizData, (newData) => {
@@ -327,13 +350,15 @@ const handleModalNext = async () => {
         // session already ended (limit reached / finished) so we don't stack
         // a pause popup over the completion screen.
         if (
+            !pauseModalOpen.value &&
+            !showResultModal.value &&
             !isLimitReached.value &&
             !isFinished.value &&
             sessionAttempted.value > lastPauseShownAt.value &&
             sessionAttempted.value % PAUSE_EVERY === 0
         ) {
             lastPauseShownAt.value = sessionAttempted.value;
-            pauseTimer();
+            pauseTimer('checkpoint');
             pauseModalOpen.value = true;
         }
     }, 300);
@@ -341,8 +366,8 @@ const handleModalNext = async () => {
 
 const continueAfterPause = () => {
     pauseModalOpen.value = false;
-    if (currentQ.value && hasSessionStarted.value && isTimerPaused.value) {
-        resumeTimer();
+    if (currentQ.value && hasSessionStarted.value) {
+        resumeTimer('checkpoint');
     }
 };
 
@@ -446,16 +471,28 @@ watch(currentQ, (newQuestion) => {
 
 watch(showExplanationModal, (isOpen) => {
     if (isOpen) {
-        stopTimer();
-    } else if (currentQ.value && hasSessionStarted.value && !isTimerPaused.value) {
-        startTimer();
+        pauseTimer('explanation');
+    } else if (currentQ.value && hasSessionStarted.value) {
+        resumeTimer('explanation');
     }
 });
 
 watch([isFinished, isLimitReached], ([finished, limited]) => {
     if (finished || limited) {
+        pauseModalOpen.value = false;
         stopTimer();
         isTimerPaused.value = false;
+    }
+
+    if (finished && !hasShownResultModal.value) {
+        resultSnapshot.value = {
+            score: sessionScore.value,
+            attempted: sessionAttempted.value,
+            timeSpent: elapsedSeconds.value,
+        };
+        pauseTimer('result');
+        showResultModal.value = true;
+        hasShownResultModal.value = true;
     }
 });
 
@@ -497,7 +534,7 @@ onBeforeUnmount(() => {
          </div>
       </div>
 
-      <div v-else-if="isFinished" class="text-center py-20 bg-white rounded-3xl shadow-sm p-8 border border-gray-100 animate-fade-in dark:border-white/10 dark:bg-slate-900/85">
+      <div v-else-if="isFinished && !showResultModal" class="text-center py-20 bg-white rounded-3xl shadow-sm p-8 border border-gray-100 animate-fade-in dark:border-white/10 dark:bg-slate-900/85">
          <div class="w-20 h-20 bg-[#dcfce7] rounded-full flex items-center justify-center mx-auto mb-4 dark:bg-emerald-400/15">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[#22c55e]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
          </div>
@@ -629,7 +666,7 @@ onBeforeUnmount(() => {
       <Teleport to="body">
         <Transition name="pause-pop">
           <div
-            v-if="pauseModalOpen"
+            v-if="false && pauseModalOpen"
             class="fixed inset-0 z-[1100] flex items-center justify-center bg-slate-950/55 p-4 backdrop-blur-sm"
           >
             <div class="relative w-full max-w-md overflow-hidden rounded-3xl border border-white/40 bg-white/85 p-6 shadow-[0_30px_120px_rgba(15,23,42,0.28)] backdrop-blur-2xl dark:border-white/10 dark:bg-slate-900/90 md:p-7">
@@ -666,6 +703,25 @@ onBeforeUnmount(() => {
           </div>
         </Transition>
       </Teleport>
+
+      <QuizPauseModal
+          :is-open="pauseModalOpen"
+          :answered-label="`${toKhmerNumeral(sessionAttempted)}`"
+          theme="amber"
+          @home="goHomeFromPause()"
+          @continue="continueAfterPause()"
+      />
+
+      <QuizResultModal
+          :is-open="showResultModal"
+          :score="`${resultSnapshot.score} / ${totalCatQuestions}`"
+          :time-spent="formattedResultTime"
+          :accuracy="resultAccuracy"
+          :is-fast-run="isFastRun"
+          @close="showResultModal = false"
+          @continue="showResultModal = false"
+          @home="router.push('/')"
+      />
 
     </div>
   </div>

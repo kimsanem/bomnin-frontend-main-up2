@@ -100,7 +100,7 @@ const topThree = computed(() => {
 });
 
 const restUsers = computed(() => {
-    return users.value.filter(u => u.rank > 3).slice(0, 15);
+    return users.value.filter(u => u.rank > 3).slice(0, 18);
 });
 
 // --- 4. METHODS ---
