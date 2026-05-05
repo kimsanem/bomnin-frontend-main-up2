@@ -2,7 +2,6 @@
 import { ref, computed, watch, watchEffect, onBeforeUnmount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import QuizExplanationModal from '@/components/QuizExplanationModal.vue';
-import QuizPauseModal from '@/components/QuizPauseModal.vue';
 import QuizResultModal from '@/components/QuizResultModal.vue';
 import { sectionOneExamGroup } from '~/data/examSectionOne';
 import { sectionTwoExamGroup } from '~/data/examSectionTwo';
@@ -188,6 +187,10 @@ const formattedResultTime = computed(() => formatDuration(resultSnapshot.value.t
 const resultAccuracy = computed(() => {
     if (!resultSnapshot.value.attempted) return 0;
     return Math.round((resultSnapshot.value.score / resultSnapshot.value.attempted) * 100);
+});
+const checkpointAccuracy = computed(() => {
+    if (!sessionAttempted.value) return 0;
+    return Math.round((sessionScore.value / sessionAttempted.value) * 100);
 });
 const isFastRun = computed(() => resultSnapshot.value.timeSpent > 0 && resultSnapshot.value.timeSpent <= 75);
 
@@ -663,51 +666,14 @@ onBeforeUnmount(() => {
           @stop="handleModalStop"
       />
 
-      <Teleport to="body">
-        <Transition name="pause-pop">
-          <div
-            v-if="false && pauseModalOpen"
-            class="fixed inset-0 z-[1100] flex items-center justify-center bg-slate-950/55 p-4 backdrop-blur-sm"
-          >
-            <div class="relative w-full max-w-md overflow-hidden rounded-3xl border border-white/40 bg-white/85 p-6 shadow-[0_30px_120px_rgba(15,23,42,0.28)] backdrop-blur-2xl dark:border-white/10 dark:bg-slate-900/90 md:p-7">
-              <div class="mb-4 flex items-center gap-3">
-                <span class="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-400/15 text-amber-600 dark:text-amber-300">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="9" />
-                    <path d="M9 10v4M15 10v4" />
-                  </svg>
-                </span>
-                <div>
-                  <p class="text-xs font-black uppercase tracking-[0.28em] text-amber-600/80 dark:text-amber-300/80">សម្រាកបន្តិច</p>
-                  <h3 class="mt-1 font-kantumruy text-xl font-black text-slate-900 dark:text-white">បានឆ្លើយ {{ toKhmerNumeral(sessionAttempted) }} សំណួរហើយ</h3>
-                </div>
-              </div>
-              <p class="mb-6 font-kantumruy text-sm text-slate-600 dark:text-slate-300">
-                តើអ្នកចង់បន្តធ្វើតេស្ត ឬ ត្រឡប់ទៅទំព័រដើម?
-              </p>
-              <div class="flex flex-col gap-3 sm:flex-row">
-                <button
-                  @click="goHomeFromPause"
-                  class="flex-1 rounded-2xl border border-slate-300/70 bg-white/70 px-5 py-3 font-kantumruy text-sm font-bold text-slate-700 transition hover:bg-white dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10"
-                >
-                  ត្រឡប់ទៅទំព័រដើម
-                </button>
-                <button
-                  @click="continueAfterPause"
-                  class="flex-1 rounded-2xl bg-[#cda043] px-5 py-3 font-kantumruy text-sm font-bold text-white shadow-lg shadow-amber-500/20 transition hover:bg-amber-600"
-                >
-                  បន្តធ្វើតេស្ត
-                </button>
-              </div>
-            </div>
-          </div>
-        </Transition>
-      </Teleport>
 
-      <QuizPauseModal
+      <QuizResultModal
           :is-open="pauseModalOpen"
-          :answered-label="`${toKhmerNumeral(sessionAttempted)}`"
-          theme="amber"
+          :score="`${sessionScore} / ${sessionAttempted}`"
+          :time-spent="formattedElapsedTime"
+          :accuracy="checkpointAccuracy"
+          :dismissible="false"
+          @close="continueAfterPause()"
           @home="goHomeFromPause()"
           @continue="continueAfterPause()"
       />
@@ -733,12 +699,5 @@ onBeforeUnmount(() => {
   from { opacity: 0; transform: translateY(-8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.pause-pop-enter-active, .pause-pop-leave-active { transition: opacity 0.22s ease; }
-.pause-pop-enter-active > div, .pause-pop-leave-active > div {
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease;
-}
-.pause-pop-enter-from, .pause-pop-leave-to { opacity: 0; }
-.pause-pop-enter-from > div, .pause-pop-leave-to > div {
-  opacity: 0; transform: scale(0.94) translateY(10px);
-}
 </style>
+
