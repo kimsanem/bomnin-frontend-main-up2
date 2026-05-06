@@ -2,9 +2,11 @@
 useHead({
   title: 'ប្រភពគោល',
 });
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { sourceG4G5Resources } from '~/data/source-g4-g5';
 
+const route = useRoute();
 const activeCategory = ref('g1');
 const searchQuery = ref('');
 
@@ -21,6 +23,15 @@ const categories = [
     { id: 'g4', name: '២៨ ក្រសួង ៦ ស្ថាប័ន'},
     { id: 'g5', name: 'វិញ្ញាសាធ្លាប់ប្រឡង'}
 ];
+
+const syncCategoryFromRoute = () => {
+    const requestedCategory = typeof route.query.category === 'string' ? route.query.category : '';
+    if (categories.some((category) => category.id === requestedCategory)) {
+        activeCategory.value = requestedCategory;
+    }
+};
+
+watch(() => route.query.category, syncCategoryFromRoute, { immediate: true });
 
 
 const coreResources = [

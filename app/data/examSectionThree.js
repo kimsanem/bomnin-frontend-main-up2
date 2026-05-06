@@ -37,7 +37,7 @@ export const sectionThreeExamGroup = {
       logo: '/ministry-logos/section-3/ក្រសួងពត័មាន.png',
     },
     {
-      title: 'ក្រសួងកម្មាធិការរៀបចំការបេាះឆ្នេាត',
+      title: 'គណៈកម្មាធិការជាតិរៀបចំការបោះឆ្នោត',
       slug: 'nec',
       logo: '/ministry-logos/section-3/គណៈកម្មាធិការជាតិរៀបចំការបោះឆ្នោត (គ.ជ.ប).png',
     }

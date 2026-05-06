@@ -38,6 +38,7 @@ const showExplanationModal = ref(false);
 const showResultModal = ref(false);
 const debugShowResultModal = ref(false);
 const elapsedSeconds = ref(0);
+const totalElapsedSeconds = ref(0);
 const questionTimerStartedAt = ref(null);
 const timerInterval = ref(null);
 const isTimerPaused = ref(false);
@@ -207,6 +208,17 @@ const toggleTimerPause = () => {
     pauseTimer('manual');
 };
 
+const resumeTimerForNextQuestion = () => {
+    if (!hasSessionStarted.value || showResultModal.value || showExplanationModal.value) return;
+    if (pauseReasons.has('manual')) {
+        resumeTimer('manual');
+        return;
+    }
+    if (!timerInterval.value && pauseReasons.size === 0) {
+        startTimer();
+    }
+};
+
 const normalizedCorrectAnswer = computed(() => {
     const rawAnswer = currentQ.value?.correct_answer;
     if (!rawAnswer) return null;
@@ -252,6 +264,7 @@ const handleModalNext = async () => {
     showExplanationModal.value = false;
 
     setTimeout(async () => {
+        totalElapsedSeconds.value += elapsedSeconds.value;
         // 🔥 លេខសំណួរកើនឡើងរាល់ការឆ្លើយ (ត្រូវឬខុស) — ដូច slug quiz
         sessionAttempted.value++;
         if (isCorrectAnswer.value) {
@@ -264,6 +277,7 @@ const handleModalNext = async () => {
             await fetchMoreQuestions();
         }
         resetQuestionState();
+        resumeTimerForNextQuestion();
     }, 300);
 };
 
@@ -337,7 +351,7 @@ watch(isSessionComplete, (isComplete) => {
     stopTimer();
     resultSnapshot.value = {
         score: sessionScore.value,
-        timeSpent: elapsedSeconds.value,
+        timeSpent: totalElapsedSeconds.value,
     };
     showResultModal.value = true;
     hasShownCompletionModal.value = true;

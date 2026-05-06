@@ -18,7 +18,7 @@
           <li><span class="font-semibold">អាសយដ្ឋានអ៊ីមែល (Email Address)</span></li>
           <li><span class="font-semibold">រូបភាពប្រវត្តិរូប (Profile Picture URL)</span></li>
         </ul>
-        <p class="privacy-note mt-2 text-sm text-gray-600 bg-gray-100 p-3 rounded-md italic">សំគាល់៖ យើងខ្ញុំ <span class="font-bold text-red-700">មិន</span> ប្រមូល ឬរក្សាទុកលេខសម្ងាត់គណនី Google របស់អ្នកឡើយ។</p>
+        <p class="privacy-note mt-2 rounded-md border border-gray-200 bg-gray-100 p-3 text-sm italic text-gray-700 dark:border-white/10 dark:bg-slate-900/85 dark:text-slate-100">សំគាល់៖ យើងខ្ញុំ <span class="font-bold text-red-700">មិន</span> ប្រមូល ឬរក្សាទុកលេខសម្ងាត់គណនី Google របស់អ្នកឡើយ។</p>
       </section>
 
       <section>
@@ -43,7 +43,7 @@
       <section>
         <h2 class="text-2xl font-bold text-blue-950 mb-3 border-l-4 border-blue-600 pl-3">៤. ទំនាក់ទំនង</h2>
         <p>ប្រសិនបើអ្នកមានសំណួរអំពីគោលការណ៍ឯកជនភាពនេះ សូមទាក់ទងមកយើងខ្ញុំតាមរយៈ៖</p>
-        <p class="privacy-email mt-2 font-mono text-blue-800 bg-blue-50 p-3 rounded-md">scientia.officialis.9@gmail.com</p>
+        <p class="privacy-email mt-2 rounded-md border border-blue-200 bg-blue-50 p-3 font-mono text-blue-800 dark:border-sky-300/25 dark:bg-slate-900 dark:text-sky-200">scientia.officialis.9@gmail.com</p>
       </section>
     </div>
 

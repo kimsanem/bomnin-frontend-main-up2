@@ -71,6 +71,7 @@ const isAnswerChecked   = ref(false);
 const showExplanationModal = ref(false);
 const showResultModal = ref(false);
 const elapsedSeconds = ref(0);
+const totalElapsedSeconds = ref(0);
 const questionTimerStartedAt = ref(null);
 const timerInterval = ref(null);
 const isTimerPaused = ref(false);
@@ -195,6 +196,24 @@ const toggleTimerPause = () => {
     }
     pauseTimer('manual');
 };
+
+const resumeTimerForNextQuestion = () => {
+    if (
+        !hasSessionStarted.value ||
+        showResultModal.value ||
+        showExplanationModal.value ||
+        pauseModalOpen.value
+    ) return;
+
+    if (pauseReasons.has('manual')) {
+        resumeTimer('manual');
+        return;
+    }
+
+    if (!timerInterval.value && pauseReasons.size === 0) {
+        startTimer(true);
+    }
+};
 // REQ 4: Restore session state when data loads
 watch(quizData, (newData) => {
     if (newData) {
@@ -275,6 +294,7 @@ const handleModalNext = async () => {
     showExplanationModal.value = false;
 
     setTimeout(async () => {
+        totalElapsedSeconds.value += elapsedSeconds.value;
         // 🔥 UPDATE UI HERE: Only increase after clicking Next
         sessionAttempted.value++;
         if (isCorrectAnswer.value) {
@@ -305,10 +325,12 @@ const handleModalNext = async () => {
             checkpointSnapshot.value = {
                 score: sessionScore.value,
                 attempted: sessionAttempted.value,
-                timeSpent: elapsedSeconds.value,
+                timeSpent: totalElapsedSeconds.value,
             };
             pauseTimer('checkpoint');
             pauseModalOpen.value = true;
+        } else {
+            resumeTimerForNextQuestion();
         }
     }, 300);
 };
@@ -316,7 +338,8 @@ const handleModalNext = async () => {
 const continueAfterPause = () => {
     pauseModalOpen.value = false;
     if (currentQ.value && hasSessionStarted.value) {
-        resumeTimer('checkpoint');
+        pauseReasons.delete('checkpoint');
+        startTimer(true);
     }
 };
 
@@ -347,7 +370,7 @@ const fetchMoreQuestions = async () => {
             rawQuestions.value     = response.questions;
             pendingQuestions.value = shuffleArray(response.questions);
             if (!timerInterval.value && !isTimerPaused.value) {
-                startTimer();
+                startTimer(true);
             }
             // Reset in-session counters since we got a new batch
             sessionCorrectCount.value = 0;
@@ -437,7 +460,7 @@ watch([isFinished, isLimitReached], ([finished, limited]) => {
         resultSnapshot.value = {
             score: sessionScore.value,
             attempted: sessionAttempted.value,
-            timeSpent: elapsedSeconds.value,
+            timeSpent: totalElapsedSeconds.value,
         };
         pauseTimer('result');
         showResultModal.value = true;
@@ -626,7 +649,7 @@ onBeforeUnmount(() => {
 
       <QuizResultModal
           :is-open="showResultModal"
-          :score="`${resultSnapshot.score} / ${totalCatQuestions}`"
+          :score="`${resultSnapshot.score} / ${resultSnapshot.attempted}`"
           :time-spent="formattedResultTime"
           :accuracy="resultAccuracy"
           :is-fast-run="isFastRun"
