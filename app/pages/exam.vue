@@ -24,7 +24,7 @@ useHead({
           to="/source?category=g5"
           class="inline-flex items-center justify-center self-start whitespace-nowrap rounded-full border border-amber-400/60 bg-[linear-gradient(135deg,#6f5218,#8f6a21_52%,#b88935)] px-6 py-3 font-kantumruy text-sm font-bold text-amber-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_12px_24px_rgba(184,137,53,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.26),0_16px_28px_rgba(184,137,53,0.28)] dark:border-amber-300/35 dark:text-amber-50 md:self-auto"
         >
-          វិញ្ញាសារធ្លាប់ប្រឡង
+          វិញ្ញាសាធ្លាប់ប្រឡង
         </NuxtLink>
       </div>
 
