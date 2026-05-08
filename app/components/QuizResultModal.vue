@@ -194,7 +194,7 @@ onBeforeUnmount(() => {
                     <span class="font-kantumruy text-xs font-bold uppercase tracking-[0.24em] text-amber-700 dark:text-amber-300 sm:text-sm sm:tracking-[0.28em]">
                       Score
                     </span>
-                    <span class="mt-1.5 font-kantumruy text-[2rem] font-black text-slate-900 dark:text-white sm:mt-2 sm:text-3xl">
+                    <span class="mt-1.5 max-w-full whitespace-nowrap font-kantumruy text-[clamp(1.6rem,8vw,2rem)] font-black leading-none tracking-tight tabular-nums text-slate-900 dark:text-white sm:mt-2 sm:text-3xl">
                       {{ displayScore }}
                     </span>
                   </div>
@@ -203,10 +203,10 @@ onBeforeUnmount(() => {
             </section>
 
             <section class="result-stage result-stage-2 space-y-3 text-center">
-              <h2 class="font-kantumruy text-[1.75rem] font-black text-slate-900 dark:text-white sm:text-2xl md:text-[2rem]">
+              <h2 class="mx-auto max-w-full whitespace-nowrap font-kantumruy text-[clamp(1.05rem,5.6vw,1.75rem)] font-black leading-tight tracking-tight text-slate-900 dark:text-white sm:text-2xl md:text-[2rem]">
                 អស្ចារ្យណាស់! សូមអបអរសាទរ!
               </h2>
-              <p class="mx-auto max-w-xl px-2 font-kantumruy text-[14px] leading-6 text-slate-600 dark:text-slate-300/80 md:text-base md:leading-7">
+              <p class="mx-auto max-w-full whitespace-nowrap px-2 font-kantumruy text-[clamp(0.72rem,3.2vw,0.95rem)] leading-tight tracking-tight text-slate-600 dark:text-slate-300/80 md:max-w-xl md:text-base md:leading-7">
                 សូមបន្តរៀនជារៀងរាល់ថ្ងៃ ដើម្បីបង្កើនភាពជោគជ័យ និងប្រាជ្ញា
               </p>
             </section>
@@ -218,7 +218,7 @@ onBeforeUnmount(() => {
                   :key="item.label"
                   class="mx-1 rounded-[18px] border border-transparent bg-white/85 px-3 py-4 text-center shadow-sm dark:bg-slate-950/20 sm:mx-2 sm:rounded-[20px] sm:bg-white/90 sm:px-4 sm:shadow-[0_10px_24px_rgba(15,23,42,0.06)] dark:sm:bg-slate-950/24 dark:sm:shadow-none"
                 >
-                  <p class="font-kantumruy text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400 sm:text-xs sm:tracking-[0.2em]">
+                  <p class="font-kantumruy text-[11px] font-bold leading-tight tracking-[0.02em] text-slate-500 dark:text-slate-400 sm:text-xs sm:tracking-[0.04em]">
                     {{ item.label }}
                   </p>
                   <p class="mt-2 font-kantumruy text-xl font-black text-slate-900 dark:text-white sm:text-2xl">

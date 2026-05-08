@@ -1,34 +1,10 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { computed } from 'vue';
 
 const { isOpen } = useSubscribeModal();
 
 const user = useCookie('user_data', { maxAge: 60 * 60 * 24 * 30, path: '/' });
 const showTermsModal = computed(() => !!user.value && !user.value.terms_accepted_at);
-
-// --- Smart Navbar Logic ---
-const showNavbar = ref(true);
-const lastScrollPosition = ref(0); 
-
-const handleScroll = () => {
-  const currentScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-
-  if (currentScrollPosition < 50) {
-    showNavbar.value = true;
-  } else {
-    showNavbar.value = currentScrollPosition < lastScrollPosition.value;
-  }
-
-  lastScrollPosition.value = currentScrollPosition;
-};
-
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll);
-});
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
-});
 </script>
 
 <template>
@@ -42,14 +18,11 @@ onUnmounted(() => {
       <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.7),rgba(248,250,252,0.92)_40%,rgba(241,245,249,0.98)_100%)] dark:bg-[radial-gradient(circle_at_top,rgba(30,41,59,0.72),rgba(15,23,42,0.96)_42%,rgba(2,6,23,1)_100%)]"></div>
     </div>
 
-    <header 
-      class="fixed top-0 left-0 z-[160] w-full transition-transform duration-300 ease-in-out"
-      :class="showNavbar ? 'translate-y-0' : '-translate-y-full'"
-    >
+    <header class="relative z-[160] w-full">
       <Navbar />
     </header>
 
-    <main class="relative z-10 flex flex-1 flex-col w-full pt-[196px] pb-8 mt-4 md:pt-[136px] md:pb-10 md:mt-6 bg-transparent dark:bg-slate-950/35">
+    <main class="relative z-10 flex flex-1 flex-col w-full pb-8 pt-6 md:pb-10 md:pt-6 bg-transparent dark:bg-slate-950/35">
         <slot />
     </main>
 

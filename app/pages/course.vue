@@ -523,7 +523,7 @@ const { isPlaying, currentTrackIndex, playlist, toggleMusic, nextTrack, prevTrac
           
           <div class="relative z-10 flex flex-col items-center pb-3">
              <div class="absolute bottom-0 left-1/2 z-20 -translate-x-1/2 translate-y-[4%] rounded-full border border-white/40 bg-slate-900/75 px-3 py-1 text-[11px] font-semibold tracking-[0.18em] text-white shadow-lg">
-                LV {{ toKhmerNumeral(treeProgress.current_level) }}
+                LV {{ treeProgress.current_level }}
              </div>
              <div class="rounded-full p-[4px]" :style="avatarRingStyle">
                  <div class="rounded-full bg-white/90 p-[4px] shadow-[0_0_34px_rgba(59,130,246,0.24)] backdrop-blur-sm dark:bg-slate-950/70 dark:shadow-[0_0_38px_rgba(59,130,246,0.20)]">
@@ -710,7 +710,7 @@ const { isPlaying, currentTrackIndex, playlist, toggleMusic, nextTrack, prevTrac
                 </div>
                 <div class="text-left">
                     <h3 class="mb-2 bg-[linear-gradient(135deg,#d97706,#92400e)] bg-clip-text font-kantumruy text-xl font-bold tracking-wide text-transparent drop-shadow-[0_2px_6px_rgba(146,64,14,0.2)] dark:bg-[linear-gradient(135deg,#fde68a,#f59e0b,#fef3c7)] dark:drop-shadow-[0_0_16px_rgba(245,158,11,0.55)]">តារាងកិត្តិយស</h3>
-                    <p class="inline-flex items-center gap-2 rounded-full bg-amber-600 px-3 py-1 text-xs font-bold text-white shadow-[0_8px_20px_rgba(217,119,6,0.25)]"><span class="relative flex h-2.5 w-2.5"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-white/70"></span><span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-white"></span></span><span>ចំណាត់ថ្នាក់កំពូលទាំង១៥ ប្រចាំខែ</span></p>
+                    <p class="inline-flex items-center gap-2 rounded-full bg-amber-600 px-3 py-1 text-xs font-bold text-white shadow-[0_8px_20px_rgba(217,119,6,0.25)]"><span class="relative flex h-2.5 w-2.5"><span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-white/70"></span><span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-white"></span></span><span>ចំណាត់ថ្នាក់កំពូលប្រចាំខែ</span></p>
                 </div>
             </div>
 

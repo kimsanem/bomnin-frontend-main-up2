@@ -403,6 +403,7 @@ const handleModalNext = async () => {
 const continueAfterPause = () => {
     pauseModalOpen.value = false;
     if (currentQ.value && hasSessionStarted.value) {
+        totalElapsedSeconds.value = 0;
         pauseReasons.delete('checkpoint');
         startTimer(true);
     }
@@ -527,6 +528,7 @@ watch([isFinished, isLimitReached], ([finished, limited]) => {
             attempted: sessionAttempted.value,
             timeSpent: totalElapsedSeconds.value,
         };
+        totalElapsedSeconds.value = 0;
         pauseTimer('result');
         showResultModal.value = true;
         hasShownResultModal.value = true;
@@ -539,7 +541,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="bg-transparent font-kantumruy flex items-center justify-center p-4 -mt-12 md:mt-5 lg:-mt-8">
+  <div class="mt-2 bg-transparent font-kantumruy flex items-center justify-center p-4 md:mt-5 lg:mt-2">
     <div class="w-full max-w-3xl space-y-5">
 
       <div v-if="pending" class="flex flex-col items-center justify-center py-20 bg-white rounded-3xl shadow-sm border border-gray-100 dark:border-white/10 dark:bg-slate-900/85">
@@ -588,7 +590,7 @@ onBeforeUnmount(() => {
                     {{ getKhmerTitle(slug) }}
                 </span>
                 <!-- REQ 4: Show cumulative score across all sessions -->
-                <span class="italic text-sm text-black md:text-[15px] dark:text-slate-200">
+                <span class="inline-flex items-center gap-1.5 rounded-full border border-amber-300/70 bg-amber-50/90 px-3 py-1 text-sm font-semibold italic text-amber-700 shadow-sm dark:border-amber-300/35 dark:bg-amber-400/10 dark:text-amber-200 md:text-[15px]">
                     score: <span class="text-red-600 dark:text-red-400">{{ sessionScore }}</span>
                 </span>
             </div>
@@ -598,7 +600,7 @@ onBeforeUnmount(() => {
         </div>
 
         <div class="flex items-center justify-between gap-3 px-1 py-1">
-            <p class="status-badge inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/75 px-3 py-2 text-xs font-medium text-slate-500 shadow-sm backdrop-blur-sm dark:border-white/10 dark:bg-slate-900/70 dark:text-slate-300">
+            <p class="status-badge inline-flex items-center gap-2 rounded-full border border-amber-300/70 bg-amber-50/90 px-3 py-2 text-xs font-semibold text-amber-700 shadow-sm backdrop-blur-sm dark:border-amber-300/35 dark:bg-amber-400/10 dark:text-amber-200">
                 <span class="relative flex h-2.5 w-2.5">
                     <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/70"></span>
                     <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(74,222,128,0.8)]"></span>
@@ -609,7 +611,7 @@ onBeforeUnmount(() => {
                 <button
                     type="button"
                     @click="toggleTimerPause"
-                    class="inline-flex h-9 items-center justify-center gap-1.5 rounded-full border border-slate-300/70 bg-white/80 px-3 text-slate-600 shadow-sm transition hover:border-amber-300 hover:text-amber-600 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-300 dark:hover:border-amber-300/40 dark:hover:text-amber-200"
+                class="inline-flex h-9 items-center justify-center gap-1.5 rounded-full border border-amber-300/70 bg-white/80 px-3 text-amber-600 shadow-sm transition hover:border-amber-300 hover:text-amber-600 dark:border-amber-300/40 dark:bg-slate-900/80 dark:text-amber-200 dark:hover:border-amber-300/40 dark:hover:text-amber-200"
                     :aria-label="isTimerPaused ? 'Resume timer' : 'Pause timer'"
                 >
                     <svg v-if="isTimerPaused" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
@@ -622,7 +624,7 @@ onBeforeUnmount(() => {
                         {{ isTimerPaused ? 'បន្ត' : 'ផ្អាក' }}
                     </span>
                 </button>
-                <div class="inline-flex items-center gap-1.5 rounded-full bg-slate-800/30 px-3 py-1 text-white ring-1 ring-white/10 backdrop-blur-md">
+            <div class="inline-flex items-center gap-1.5 rounded-full bg-slate-800/30 px-3 py-1 text-amber-200 ring-1 ring-amber-300/20 backdrop-blur-md">
                     <span class="flex h-5 w-5 items-center justify-center rounded-full bg-white/10">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" :class="isTimerPaused ? '' : 'animate-[tick_1.2s_ease-in-out_infinite]'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="8.5" />

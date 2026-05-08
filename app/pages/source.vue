@@ -2132,12 +2132,36 @@ const coreResources = [
 
 const resources = [...coreResources, ...sourceG4G5Resources];
 
+const normalizeSearchValue = (value) => String(value || '').toLowerCase().trim();
+
+const categoryNameById = computed(() =>
+    Object.fromEntries(categories.map((category) => [category.id, category.name]))
+);
 
 const filteredResources = computed(() => {
+    const normalizedQuery = normalizeSearchValue(searchQuery.value);
+
     return resources.filter(item => {
         const matchesCategory = activeCategory.value === 'all' || item.category === activeCategory.value;
-        const matchesSearch = item.title.toLowerCase().includes(searchQuery.value.toLowerCase()) || 
-                              (item.description && item.description.toLowerCase().includes(searchQuery.value.toLowerCase()));
+
+        if (!normalizedQuery) {
+            return matchesCategory;
+        }
+
+        const searchableText = [
+            item.title,
+            item.description,
+            item.date,
+            item.type,
+            item.size,
+            item.category,
+            categoryNameById.value[item.category],
+        ]
+            .map(normalizeSearchValue)
+            .filter(Boolean)
+            .join(' ');
+
+        const matchesSearch = searchableText.includes(normalizedQuery);
         return matchesCategory && matchesSearch;
     });
 });
@@ -2205,9 +2229,9 @@ const handlePdfClick = async (item) => {
   <div class="min-h-screen font-siemreap px-4 pb-4 pt-1 md:pb-10 md:pt-4 lg:pb-6 lg:pt-2 text-slate-900 dark:text-slate-100">
     <div class="max-w-7xl mx-auto">
 
-        <div class="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6 mb-4 md:mb-5">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-2 md:gap-6 mb-3 md:mb-5">
             <div class="w-full overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
-                <div class="flex w-full min-w-max items-center gap-1.5 px-1 md:gap-2">
+                <div class="flex w-max min-w-max items-center gap-1.5 px-1 md:mx-auto md:gap-8">
                     <button 
                         v-for="cat in categories" 
                         :key="cat.id"
@@ -2215,20 +2239,40 @@ const handlePdfClick = async (item) => {
                         class="rounded-full border px-3 py-2 text-xs font-kantumruy whitespace-nowrap transition-all duration-200 md:px-5 md:py-2.5 md:text-sm"
                         :class="[
                             isPremiumCategory(cat.id)
-                                ? 'ml-3 md:ml-12'
+                                ? 'ml-2 md:ml-16'
                                 : '',
                             activeCategory === cat.id
                                 ? isPremiumCategory(cat.id)
                                     ? 'border-[#c9a54c] bg-[linear-gradient(135deg,#fbf4dc,#e8cf8a_52%,#c89c3d)] text-[#5f4310] shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_10px_20px_rgba(181,140,52,0.20)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_12px_24px_rgba(181,140,52,0.24)]'
-                                    : 'bg-[#1e3a8a] text-white border-[#1e3a8a] shadow-md transform dark:bg-sky-500/20 dark:text-sky-100 dark:border-sky-300/50 dark:shadow-[0_0_20px_rgba(56,189,248,0.18)]'
+                                    : 'border-amber-300/70 bg-[linear-gradient(135deg,rgba(120,53,15,0.18),rgba(217,119,6,0.22))] text-amber-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_0_0_1px_rgba(251,191,36,0.08),0_0_20px_rgba(245,158,11,0.16)] dark:border-amber-300/60 dark:text-amber-100 dark:shadow-[0_0_24px_rgba(251,191,36,0.14)]'
                                 : isPremiumCategory(cat.id)
                                     ? 'border-[#dfc27a] bg-[linear-gradient(135deg,rgba(255,251,239,0.98),rgba(245,231,188,0.96))] text-[#88611a] shadow-[inset_0_1px_0_rgba(255,255,255,0.72),0_8px_18px_rgba(201,165,76,0.12)] hover:border-[#c9a54c] hover:text-[#6d4d12] hover:bg-[linear-gradient(135deg,rgba(255,249,228,0.99),rgba(240,218,159,0.98))] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.78),0_10px_22px_rgba(181,140,52,0.18)] dark:border-[#c9a54c]/60 dark:bg-[linear-gradient(135deg,rgba(84,63,24,0.95),rgba(118,87,29,0.94))] dark:text-[#f5df9d] dark:shadow-[0_10px_22px_rgba(0,0,0,0.24)]'
-                                    : 'bg-white text-gray-600 border-gray-200 hover:bg-blue-50 hover:border-blue-200 dark:bg-slate-900/80 dark:text-slate-300 dark:border-white/10 dark:hover:bg-white/10 dark:hover:border-sky-300/30'
+                                    : 'border-amber-300/20 bg-white/5 text-slate-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_0_0_1px_rgba(251,191,36,0.04)] hover:border-amber-300/45 hover:bg-amber-400/[0.08] hover:text-amber-100 hover:shadow-[0_0_18px_rgba(245,158,11,0.12)] dark:bg-slate-900/80 dark:text-slate-300 dark:border-amber-300/15 dark:hover:bg-amber-400/[0.08] dark:hover:border-amber-300/35'
                         ]"
                     >
                         {{ cat.name }}
                     </button>
                 </div>
+            </div>
+
+        </div>
+
+        <div class="mx-auto flex w-full justify-center py-4 md:py-10">
+            <label for="source-search" class="sr-only">Search documents</label>
+            <div class="group relative w-full max-w-3xl rounded-full border border-amber-300/25 shadow-[0_0_0_1px_rgba(251,191,36,0.12),0_0_26px_rgba(245,158,11,0.18)] transition duration-200">
+                <span class="pointer-events-none absolute inset-y-0 left-0 z-10 flex items-center pl-4 text-amber-300/60 transition-colors duration-200 group-hover:text-amber-200 group-focus-within:text-amber-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-[1.1rem] md:w-[1.1rem]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <path d="m20 20-3.5-3.5"></path>
+                    </svg>
+                </span>
+                <input
+                    id="source-search"
+                    v-model="searchQuery"
+                    type="search"
+                    placeholder="ស្វែងរកឯកសារ តាមចំណងជើង ពិពណ៌នា ឆ្នាំ ប្រភេទ..."
+                    class="w-full rounded-full border border-amber-300/30 bg-slate-900/40 py-2.5 pl-12 pr-4 font-kantumruy text-sm text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_36px_rgba(2,6,23,0.18)] backdrop-blur-xl outline-none transition duration-200 placeholder:text-slate-500 hover:border-amber-300/45 hover:bg-slate-900/50 focus:border-amber-400/55 focus:ring-4 focus:ring-amber-400/10 md:py-3"
+                />
             </div>
         </div>
 

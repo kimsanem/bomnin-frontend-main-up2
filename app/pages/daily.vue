@@ -458,7 +458,9 @@ const getOptionTextClass = (key) => {
                 <span class="text-gray-800 font-bold text-sm md:text-[15px] tracking-wide dark:text-slate-100">
                     អនុវត្តប្រចាំថ្ងៃ ({{ toKhmerNumeral(Math.min(sessionAttempted + 1, dailyLimit)) }}/{{ toKhmerNumeral(dailyLimit) }})
                 </span>
-                <span class="text-black italic text-sm md:text-[15px] dark:text-slate-200">Score: <span class="text-red-600">{{ sessionScore }}</span></span>
+                <span class="inline-flex items-center gap-1.5 rounded-full border border-amber-300/70 bg-amber-50/90 px-3 py-1 text-sm font-semibold italic text-amber-700 shadow-sm dark:border-amber-300/35 dark:bg-amber-400/10 dark:text-amber-200 md:text-[15px]">
+                    Score: <span class="text-red-600 dark:text-red-400">{{ sessionScore }}</span>
+                </span>
             </div>
             <div class="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden dark:bg-slate-800">
                 <div class="h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-full transition-all duration-500" :style="{ width: `${progressPercent}%` }"></div>
@@ -466,14 +468,14 @@ const getOptionTextClass = (key) => {
         </div>
 
         <div class="flex items-center justify-between gap-3 px-1 py-1">
-            <p class="status-badge mr-2 text-xs font-medium text-slate-500 dark:text-slate-300">
+            <p class="status-badge mr-2 inline-flex items-center gap-2 rounded-full border border-amber-300/70 bg-amber-50/90 px-3 py-2 text-xs font-semibold text-amber-700 shadow-sm backdrop-blur-sm dark:border-amber-300/35 dark:bg-amber-400/10 dark:text-amber-200">
                 ការអនុវត្តបានចាប់ផ្តើម
             </p>
             <div class="flex items-center gap-2">
             <button
                 type="button"
                 @click="toggleTimerPause"
-                class="inline-flex h-9 items-center justify-center gap-1.5 rounded-full border border-slate-300/70 bg-white/80 px-3 text-slate-600 shadow-sm transition hover:border-violet-300 hover:text-violet-600 dark:border-white/10 dark:bg-slate-900/80 dark:text-slate-300 dark:hover:border-violet-300/40 dark:hover:text-violet-200"
+                class="inline-flex h-9 items-center justify-center gap-1.5 rounded-full border border-amber-300/70 bg-white/80 px-3 text-amber-600 shadow-sm transition hover:border-amber-300 hover:text-amber-600 dark:border-amber-300/40 dark:bg-slate-900/80 dark:text-amber-200 dark:hover:border-amber-300/40 dark:hover:text-amber-200"
                 :aria-label="isTimerPaused ? 'Resume timer' : 'Pause timer'"
             >
                 <svg v-if="isTimerPaused" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
@@ -486,7 +488,7 @@ const getOptionTextClass = (key) => {
                     {{ isTimerPaused ? 'បន្ត' : 'ផ្អាក' }}
                 </span>
             </button>
-            <div class="inline-flex items-center gap-1.5 rounded-full bg-slate-800/30 px-3 py-1 text-white ring-1 ring-white/10 backdrop-blur-md">
+            <div class="inline-flex items-center gap-1.5 rounded-full bg-slate-800/30 px-3 py-1 text-amber-200 ring-1 ring-amber-300/20 backdrop-blur-md">
                 <span class="flex h-5 w-5 items-center justify-center rounded-full bg-white/10">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" :class="isTimerPaused ? '' : 'animate-[tick_1.2s_ease-in-out_infinite]'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="8.5" />
