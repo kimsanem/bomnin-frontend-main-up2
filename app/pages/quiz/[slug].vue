@@ -101,7 +101,7 @@ const sessionWrongCount   = ref(0);  // wrong in this session only
 // `lastPauseShownAt` is seeded from the persisted answered_count so a refresh
 // at e.g. 31/100 does not immediately re-fire the 30-popup.
 const PAUSE_EVERY = 15;
-const pauseModalOpen = ref(true);
+const pauseModalOpen = ref(false);
 const lastPauseShownAt = ref(0);
 
 
