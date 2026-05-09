@@ -81,15 +81,53 @@ const fetchTreeProgress = async () => {
     }
 };
 
+// Frozen snapshot for the May 2026 season. Replace once the season ends.
+const LOCKED_HONOR_ROLL = [
+    { rank: 1,  name: 'enoeurng rith',                  score: 2777 },
+    { rank: 2,  name: 'Phan Chakriya',                  score: 2113 },
+    { rank: 3,  name: 'ស្រីនុត ឃ័ម',                       score: 1972 },
+    { rank: 4,  name: 'Ket Sophal',                     score: 1867 },
+    { rank: 5,  name: 'ធេង ស៊ូទៀង Cheng suteang',         score: 1456 },
+    { rank: 6,  name: 'Sakk',                           score: 1440 },
+    { rank: 7,  name: 'Si Pheav',                       score: 1419 },
+    { rank: 8,  name: 'Seng Pricha',                    score:  877 },
+    { rank: 9,  name: 'Mao Doung Sou',                  score:  864 },
+    { rank: 10, name: 'Nalarya Chan',                   score:  856 },
+    { rank: 11, name: 'Meng Ly',                        score:  852 },
+    { rank: 12, name: 'Kan Soklam',                     score:  837 },
+    { rank: 13, name: 'chen sovansakha',                score:  804 },
+    { rank: 14, name: 'Kanha Chem',                     score:  680 },
+    { rank: 15, name: 'Kim hort',                       score:  662 },
+];
+
 const fetchLeaderboard = async () => {
     isLeaderboardLoading.value = true;
     try {
         const response = await $api('/leaderboard/honor-roll');
-        if (response) {
-            leaderboardUsers.value = response;
-        }
+        const byName = new Map(
+            Array.isArray(response) ? response.map((u) => [u.name, u]) : []
+        );
+        leaderboardUsers.value = LOCKED_HONOR_ROLL.map((entry) => {
+            const live = byName.get(entry.name);
+            return {
+                rank: entry.rank,
+                name: entry.name,
+                score: entry.score,
+                id: live?.id ?? null,
+                bio: live?.bio ?? null,
+                avatar: live?.avatar ?? null,
+                socials: live?.socials ?? [],
+            };
+        });
     } catch (err) {
         console.error("Failed to fetch leaderboard:", err);
+        leaderboardUsers.value = LOCKED_HONOR_ROLL.map((entry) => ({
+            ...entry,
+            id: null,
+            bio: null,
+            avatar: null,
+            socials: [],
+        }));
     } finally {
         isLeaderboardLoading.value = false;
     }
