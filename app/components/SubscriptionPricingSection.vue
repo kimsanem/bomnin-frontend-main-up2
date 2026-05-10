@@ -23,7 +23,7 @@ const plans: PricingPlan[] = [
 
   // first card 2$
   {
-    name: 'កញ្ចប់មូលដ្ឋាន',
+    name: 'មូលដ្ឋានគ្រឹះចំណេះទូទៅ',
     subtitle: 'Basic',
     price: '$2',
     period: '/ ខែ',
@@ -31,22 +31,22 @@ const plans: PricingPlan[] = [
     accent: 'from-emerald-400/30 via-emerald-300/10 to-transparent dark:from-emerald-500/12 dark:via-emerald-400/4 dark:to-transparent',
     buttonLabel: 'ជ្រើសរើសកញ្ចប់នេះ',
     buttonClass:
-      'border border-slate-200 bg-white text-slate-600 hover:border-indigo-200 hover:bg-indigo-50/50 dark:border-white/15 dark:bg-white/5 dark:text-slate-100 dark:hover:border-emerald-300/55 dark:hover:bg-emerald-400/10',
+      'border border-slate-300/90 bg-white text-slate-700 shadow-[0_10px_24px_rgba(15,23,42,0.08)] hover:border-indigo-300 hover:bg-indigo-50/70 hover:shadow-[0_14px_30px_rgba(99,102,241,0.12)] dark:border-white/15 dark:bg-white/5 dark:text-slate-100 dark:hover:border-emerald-300/55 dark:hover:bg-emerald-400/10',
     features: [
       'វិញ្ញាសាចំណេះដឹងទូទៅប្រចាំថ្ងៃ',
       'មូលដ្ឋានគ្រឹះចំណេះដឹងទូទៅ',
-      'ប្រវត្តិសាស្ត្រ/បេតិកភណ្ឌ',
-      'ច្បាប់/រដ្ឋបាល/បច្ចេកវិទ្យា',
-      'អង់គ្លេស (TOEFL)/តក្កវិទ្យា',
-      'បណ្ណាល័យឯកសារមុំទាំង១២',
-      'AI Chat Bot',
-      'វិញ្ញាបនបត្រ (E-Certificate)',
+      'ប្រវត្តិសាស្ត្រ អរិយធម៌ បេតិកភណ្ឌ',
+      'ច្បាប់ រដ្ឋបាល ហិរញ្ញវត្ថុ គោលនយោបាយ បច្ចេកវិទ្យា',
+      ' អង់គ្លេស (TOEFL) ករណីសិក្សា តក្កវិទ្យា',
+      'បណ្ណាល័យឯកសារ មុំទាំង១២',
+      'AI Chat Bot សំណួរ-ចម្លើយ',
+      'វិញ្ញាបនបត្រ (E-Certificate) បញ្ជាក់ពិន្ទុ',
     ],
   },
 
   // second card 3.5$
   {
-    name: 'កញ្ចប់ត្រៀមប្រឡង',
+    name: 'កម្ពុជា ក្រសួងស្ថាប័នរដ្ឋ',
     subtitle: 'Pro',
     price: '$3.5',
     period: '/ ខែ',
@@ -54,19 +54,21 @@ const plans: PricingPlan[] = [
     accent: 'from-sky-400/30 via-sky-300/10 to-transparent dark:from-sky-500/12 dark:via-sky-400/4 dark:to-transparent',
     buttonLabel: 'ជ្រើសរើសកញ្ចប់នេះ',
     buttonClass:
-      'border border-slate-200 bg-white text-slate-600 hover:border-indigo-200 hover:bg-indigo-50/50 dark:border-white/15 dark:bg-white/5 dark:text-slate-100 dark:hover:border-sky-300/55 dark:hover:bg-sky-400/10',
+      'border border-slate-300/90 bg-white text-slate-700 shadow-[0_10px_24px_rgba(15,23,42,0.08)] hover:border-indigo-300 hover:bg-indigo-50/70 hover:shadow-[0_14px_30px_rgba(99,102,241,0.12)] dark:border-white/15 dark:bg-white/5 dark:text-slate-100 dark:hover:border-sky-300/55 dark:hover:bg-sky-400/10',
     features: [
+      'ក្របខណ្ឌគតិយុត្ត ឯកសារគោលជាតិ',
+      'ចំណេះដឹងក្រសួងស្ថាប័នរដ្ឋទាំង ៣៤',
       'វិញ្ញាសាត្រៀមប្រឡងទាំង ៣៤ ស្ថាប័ន',
-      'វិញ្ញាសាធ្លាប់ប្រឡង (Past Papers)',
-      'បណ្ណាល័យឯកសារក្រសួង-ស្ថាប័ន',
-      'AI Chat Bot',
-      'វិញ្ញាបនបត្រ (E-Certificate)',
+      'វិញ្ញាសាធ្លាប់ប្រឡង ទាំង៣៤ ក្រសួង-ស្ថាប័ន',
+      'បណ្ណាល័យឯកសារ ទាំង៣៤ ក្រសួង-ស្ថាប័ន',
+      'AI Chat Bot សំណួរ-ចម្លើយ',
+      'វិញ្ញាបនបត្រ (E-Certificate) បញ្ជាក់ពិន្ទុ',
     ],
   },
 
   // third card (special card ) most popular
   {
-    name: 'កញ្ចប់ពេញលេញ',
+    name: 'ទិន្នន័យទាំងអស់',
     subtitle: 'Full Access',
     price: '$4',
     period: '/ ខែ',
@@ -78,10 +80,14 @@ const plans: PricingPlan[] = [
       'border border-violet-300/40 bg-gradient-to-r from-violet-500 to-indigo-600 text-white shadow-[0_14px_32px_rgba(199,210,254,0.95)] hover:from-violet-400 hover:to-indigo-500 dark:shadow-[0_10px_24px_rgba(79,70,229,0.28)]',
     highlighted: true,
     features: [
-      'រួមបញ្ចូលអត្ថប្រយោជន៍ទាំងអស់ (មុំទាំង១២ + ៣៤ ក្រសួង)',
+      'Full Unlock មុំទាំង១២',
+      'Full Unlock ក្រសួងស្ថាប័នរដ្ឋទាំង៣៤',
+      'វប្បធម៌ទូទៅ ចំណេះទូទៅ អនុវត្តប្រចាំថ្ងៃ',
+      'ក្របខណ្ឌគតិយុត្ត ឯកសារគោលជាតិ',
+      'វិញ្ញាសាត្រៀមប្រឡង និងធ្លាប់ប្រឡង ក្រសួងស្ថាប័នរដ្ឋទាំង៣៤',
       'ចូលមើលវិញ្ញាសា និងឯកសារគ្រប់ប្រភេទ',
-      'AI Chat Bot (គ្មានដែនកំណត់)',
-      'វិញ្ញាបនបត្រ (E-Certificate)',
+      'AI Chat Bot សំណួរ-ចម្លើយ',
+      'វិញ្ញាបនបត្រ (E-Certificate) បញ្ជាក់ពិន្ទ',
     ],
   },
 ];
@@ -114,11 +120,11 @@ const plans: PricingPlan[] = [
           :class="
             plan.highlighted
               ? 'bg-gradient-to-b from-violet-400 via-indigo-500 to-violet-600 shadow-[0_24px_60px_rgba(129,140,248,0.24)] dark:bg-gradient-to-b dark:from-violet-800 dark:via-violet-900 dark:to-[#140b2e] dark:shadow-[0_24px_80px_rgba(76,29,149,0.32)]'
-              : 'bg-white ring-1 ring-slate-200/80 shadow-[0_20px_50px_rgba(0,0,0,0.04)] dark:bg-white/10 dark:ring-0 dark:shadow-none'
+              : 'bg-white ring-1 ring-slate-300/85 shadow-[0_24px_60px_rgba(15,23,42,0.08)] dark:bg-white/10 dark:ring-0 dark:shadow-none'
           "
         >
           <div
-            class="relative flex h-full flex-col rounded-[calc(1.65rem-1px)] border border-slate-300/80 bg-white p-4 shadow-[0_20px_50px_rgba(0,0,0,0.04)] backdrop-blur-md transition-colors duration-300 group-hover:border-slate-400 dark:border-white/10 dark:bg-slate-900/50 dark:shadow-none dark:backdrop-blur-xl dark:group-hover:border-white/20 sm:p-5 lg:p-6"
+            class="relative flex h-full flex-col rounded-[calc(1.65rem-1px)] border border-slate-300/90 bg-white/95 p-4 shadow-[0_24px_60px_rgba(15,23,42,0.08)] backdrop-blur-md transition-colors duration-300 group-hover:border-slate-400 dark:border-white/10 dark:bg-slate-900/50 dark:shadow-none dark:backdrop-blur-xl dark:group-hover:border-white/20 sm:p-5 lg:p-6"
             :class="plan.highlighted ? 'dark:bg-slate-950/30' : ''"
           >
             <div
@@ -146,7 +152,7 @@ const plans: PricingPlan[] = [
                 </div>
                 <span
                   v-if="plan.badge"
-                  class="pricing-badge relative overflow-hidden rounded-full border border-amber-300/70 bg-violet-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-700 shadow-[0_10px_24px_rgba(139,92,246,0.08)] dark:border-amber-300/55 dark:bg-violet-400/15 dark:text-violet-100 sm:text-xs"
+                  class="pricing-badge relative overflow-hidden rounded-full border border-amber-300/80 bg-violet-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-700 shadow-[0_12px_26px_rgba(139,92,246,0.12)] dark:border-amber-300/55 dark:bg-violet-400/15 dark:text-violet-100 sm:text-xs"
                 >
                   <span class="relative z-10">{{ plan.badge }}</span>
                   <span class="pricing-badge-glow absolute inset-y-0 -left-1/3 w-1/3 -skew-x-12 bg-white/35 dark:bg-amber-200/20"></span>
@@ -161,7 +167,7 @@ const plans: PricingPlan[] = [
                 <h3 class="mt-3 font-kantumruy text-xl font-black text-slate-900 dark:text-slate-100 sm:text-2xl">{{ plan.title }}</h3>
               </div>
 
-              <ul class="relative mb-6 space-y-3 rounded-2xl border border-slate-300/80 bg-slate-100/50 p-4 font-kantumruy text-[13px] leading-6 text-slate-600 dark:border-transparent dark:bg-transparent dark:p-0 dark:text-slate-300 sm:text-sm">
+              <ul class="relative mb-6 space-y-3 rounded-2xl border border-slate-300/90 bg-slate-100/75 p-4 font-kantumruy text-[13px] leading-6 text-slate-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_12px_28px_rgba(15,23,42,0.05)] dark:border-transparent dark:bg-transparent dark:p-0 dark:text-slate-300 dark:shadow-none sm:text-sm">
                 <li
                   v-for="feature in plan.features"
                   :key="feature"
