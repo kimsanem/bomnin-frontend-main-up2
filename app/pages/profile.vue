@@ -353,7 +353,7 @@ onUnmounted(stopTimers);
 
             <button
               type="button"
-              class="absolute right-4 top-4 z-20 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/45 px-3 py-2 text-[11px] font-bold tracking-[0.14em] text-white shadow-lg backdrop-blur-md transition hover:bg-black/60"
+              class="absolute right-4 top-4 z-20 hidden items-center gap-2 rounded-full border border-white/15 bg-black/45 px-3 py-2 text-[11px] font-bold tracking-[0.14em] text-white shadow-lg backdrop-blur-md transition hover:bg-black/60 md:inline-flex"
               @click="openExpandedVideo"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -413,12 +413,12 @@ onUnmounted(stopTimers);
     <Transition name="qr-fade">
       <div
         v-if="isVideoExpanded"
-        class="fixed inset-0 z-[9998] flex items-center justify-center p-4 font-kantumruy"
+        class="fixed inset-0 z-[9998] flex items-center justify-center overflow-auto p-4 font-kantumruy"
         style="background:rgba(2,6,23,0.88);backdrop-filter:blur(10px)"
         @click="closeExpandedVideo"
       >
         <div
-          class="relative w-full max-w-6xl overflow-hidden rounded-[2rem] border border-sky-300/40 bg-slate-950 shadow-[0_0_40px_rgba(56,189,248,0.24)]"
+          class="relative w-[min(92vw,34rem)] max-h-[calc(100vh-2rem)] overflow-hidden rounded-[2rem] border-[3px] border-[#7dd3fc] bg-black shadow-[0_0_40px_rgba(56,189,248,0.28)]"
           @click.stop
         >
           <button
@@ -432,7 +432,7 @@ onUnmounted(stopTimers);
             </svg>
           </button>
 
-          <div class="relative aspect-video w-full bg-black">
+          <div class="relative aspect-[2.5/4] max-h-[calc(100vh-2rem)] w-full bg-black">
             <div class="absolute left-1/2 top-5 z-20 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/20 bg-[#1e3a8a] px-5 py-2 text-[11px] font-bold tracking-widest text-white shadow-lg">
               កម្រិតទី {{ treeProgress.current_level }} – {{ treeProgress.level_name }}
             </div>
@@ -444,8 +444,18 @@ onUnmounted(stopTimers);
               loop
               muted
               playsinline
-              class="absolute inset-0 h-full w-full object-contain"
+              class="absolute inset-0 h-full w-full object-cover"
             ></video>
+
+            <div class="absolute bottom-4 left-1/2 z-20 w-[72%] -translate-x-1/2 rounded-2xl border border-white/10 bg-black/40 p-3 backdrop-blur-sm">
+              <div class="mb-1.5 flex justify-between text-[11px] font-bold text-white drop-shadow-md">
+                <span>ឆ្ពោះទៅកម្រិតបន្ទាប់</span>
+                <span>{{ treeProgress.progress_percentage }}%</span>
+              </div>
+              <div class="h-1.5 w-full overflow-hidden rounded-full bg-gray-600/50">
+                <div class="h-full rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.8)] transition-all duration-700" :style="{ width: `${treeProgress.progress_percentage}%` }"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
