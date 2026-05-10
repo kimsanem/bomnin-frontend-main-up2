@@ -15,6 +15,8 @@ const config = useRuntimeConfig();
 const baseUrl = config.public.apiBase;
 
 const authToken = useCookie('auth_token');
+const isLoginModalOpen = useState('loginModal');
+const openLoginModal = () => isLoginModalOpen.value = true;
 
 const categories = [
     { id: 'g1', name: 'ខេមរវិទ្យា និង មនុស្សសាស្ត្រ' },
@@ -2180,7 +2182,7 @@ const getCoverUrl = (path) => {
 
 const handlePdfClick = async (item) => {
     if (!authToken.value) {
-        alert("សូមចូលគណនី (Login) ជាមុនសិន!");
+        openLoginModal();
         return;
     }
 
@@ -2244,10 +2246,10 @@ const handlePdfClick = async (item) => {
                             activeCategory === cat.id
                                 ? isPremiumCategory(cat.id)
                                     ? 'border-[#c9a54c] bg-[linear-gradient(135deg,#fbf4dc,#e8cf8a_52%,#c89c3d)] text-[#5f4310] shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_10px_20px_rgba(181,140,52,0.20)] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_12px_24px_rgba(181,140,52,0.24)]'
-                                    : 'border-amber-300/70 bg-[linear-gradient(135deg,rgba(120,53,15,0.18),rgba(217,119,6,0.22))] text-amber-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_0_0_1px_rgba(251,191,36,0.08),0_0_20px_rgba(245,158,11,0.16)] dark:border-amber-300/60 dark:text-amber-100 dark:shadow-[0_0_24px_rgba(251,191,36,0.14)]'
+                                    : 'border-amber-300/70 bg-[linear-gradient(135deg,rgba(255,248,229,0.98),rgba(253,230,138,0.92))] text-amber-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.65),0_0_0_1px_rgba(251,191,36,0.08),0_10px_20px_rgba(245,158,11,0.12)] dark:border-amber-300/60 dark:bg-[linear-gradient(135deg,rgba(120,53,15,0.18),rgba(217,119,6,0.22))] dark:text-amber-100 dark:shadow-[0_0_24px_rgba(251,191,36,0.14)]'
                                 : isPremiumCategory(cat.id)
                                     ? 'border-[#dfc27a] bg-[linear-gradient(135deg,rgba(255,251,239,0.98),rgba(245,231,188,0.96))] text-[#88611a] shadow-[inset_0_1px_0_rgba(255,255,255,0.72),0_8px_18px_rgba(201,165,76,0.12)] hover:border-[#c9a54c] hover:text-[#6d4d12] hover:bg-[linear-gradient(135deg,rgba(255,249,228,0.99),rgba(240,218,159,0.98))] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.78),0_10px_22px_rgba(181,140,52,0.18)] dark:border-[#c9a54c]/60 dark:bg-[linear-gradient(135deg,rgba(84,63,24,0.95),rgba(118,87,29,0.94))] dark:text-[#f5df9d] dark:shadow-[0_10px_22px_rgba(0,0,0,0.24)]'
-                                    : 'border-amber-300/20 bg-white/5 text-slate-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_0_0_1px_rgba(251,191,36,0.04)] hover:border-amber-300/45 hover:bg-amber-400/[0.08] hover:text-amber-100 hover:shadow-[0_0_18px_rgba(245,158,11,0.12)] dark:bg-slate-900/80 dark:text-slate-300 dark:border-amber-300/15 dark:hover:bg-amber-400/[0.08] dark:hover:border-amber-300/35'
+                                    : 'border-slate-200/80 bg-white/85 text-slate-600 shadow-[0_8px_20px_rgba(15,23,42,0.04)] hover:border-amber-300/45 hover:bg-amber-50 hover:text-amber-900 hover:shadow-[0_10px_24px_rgba(245,158,11,0.10)] dark:border-amber-300/15 dark:bg-slate-900/80 dark:text-slate-300 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_0_0_1px_rgba(251,191,36,0.04)] dark:hover:bg-amber-400/[0.08] dark:hover:border-amber-300/35 dark:hover:text-amber-100'
                         ]"
                     >
                         {{ cat.name }}
@@ -2259,8 +2261,8 @@ const handlePdfClick = async (item) => {
 
         <div class="mx-auto flex w-full justify-center py-4 md:py-10">
             <label for="source-search" class="sr-only">Search documents</label>
-            <div class="group relative w-full max-w-3xl rounded-full border border-amber-300/25 shadow-[0_0_0_1px_rgba(251,191,36,0.12),0_0_26px_rgba(245,158,11,0.18)] transition duration-200">
-                <span class="pointer-events-none absolute inset-y-0 left-0 z-10 flex items-center pl-4 text-amber-300/60 transition-colors duration-200 group-hover:text-amber-200 group-focus-within:text-amber-300">
+            <div class="group relative w-full max-w-3xl rounded-full border border-slate-200/80 bg-white/80 shadow-[0_20px_50px_rgba(0,0,0,0.04)] transition duration-200 dark:border-amber-300/25 dark:bg-transparent dark:shadow-[0_0_0_1px_rgba(251,191,36,0.12),0_0_26px_rgba(245,158,11,0.18)]">
+                <span class="pointer-events-none absolute inset-y-0 left-0 z-10 flex items-center pl-4 text-amber-500/70 transition-colors duration-200 group-hover:text-amber-600 group-focus-within:text-amber-500 dark:text-amber-300/60 dark:group-hover:text-amber-200 dark:group-focus-within:text-amber-300">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-[1.1rem] md:w-[1.1rem]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="7"></circle>
                         <path d="m20 20-3.5-3.5"></path>
@@ -2271,7 +2273,7 @@ const handlePdfClick = async (item) => {
                     v-model="searchQuery"
                     type="search"
                     placeholder="ស្វែងរកឯកសារ តាមចំណងជើង ពិពណ៌នា ឆ្នាំ ប្រភេទ..."
-                    class="w-full rounded-full border border-amber-300/30 bg-slate-900/40 py-2.5 pl-12 pr-4 font-kantumruy text-sm text-slate-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_36px_rgba(2,6,23,0.18)] backdrop-blur-xl outline-none transition duration-200 placeholder:text-slate-500 hover:border-amber-300/45 hover:bg-slate-900/50 focus:border-amber-400/55 focus:ring-4 focus:ring-amber-400/10 md:py-3"
+                    class="w-full rounded-full border border-slate-200 bg-white/90 py-2.5 pl-12 pr-4 font-kantumruy text-sm text-slate-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_18px_36px_rgba(15,23,42,0.06)] backdrop-blur-xl outline-none transition duration-200 placeholder:text-slate-400 hover:border-amber-300/45 hover:bg-white focus:border-amber-400/55 focus:ring-4 focus:ring-amber-400/10 dark:border-amber-300/30 dark:bg-slate-900/40 dark:text-slate-200 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_36px_rgba(2,6,23,0.18)] dark:placeholder:text-slate-500 dark:hover:bg-slate-900/50 md:py-3"
                 />
             </div>
         </div>

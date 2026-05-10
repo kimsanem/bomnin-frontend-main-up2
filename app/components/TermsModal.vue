@@ -34,22 +34,22 @@ const handleAccept = async () => {
     <Transition name="terms-fade">
       <div
         v-if="isOpen"
-        class="fixed inset-0 z-[1100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+        class="fixed inset-0 z-[1100] flex items-center justify-center bg-slate-500/20 p-3 backdrop-blur-md sm:p-4"
       >
-        <div class="w-full max-w-[560px] bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-white/10 flex flex-col max-h-[90vh] overflow-hidden">
+        <div class="flex max-h-[92vh] w-full max-w-[560px] flex-col overflow-hidden rounded-2xl border border-slate-200/60 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.04)] dark:border-white/10 dark:bg-slate-900">
 
-          <div class="bg-[#e6f4ea] dark:bg-emerald-950/80 px-6 py-5 border-b border-[#cce5d3] dark:border-emerald-400/20 flex items-center gap-3">
-            <img src="/logo.png" class="w-9 h-9 object-contain" alt="Logo" />
-            <h2 class="font-kantumruy font-bold text-gray-900 dark:text-emerald-50 text-[17px] md:text-[19px]">
+          <div class="flex items-center gap-3 border-b border-[#cce5d3] bg-[#e6f4ea] px-4 py-4 dark:border-emerald-400/20 dark:bg-emerald-950/80 sm:px-6 sm:py-5">
+            <img src="/logo.png" class="h-8 w-8 object-contain sm:h-9 sm:w-9" alt="Logo" />
+            <h2 class="font-kantumruy text-[16px] font-black leading-7 text-slate-900 dark:text-emerald-50 sm:text-[19px]">
               លក្ខខណ្ឌប្រើប្រាស់ និងគោលការណ៍ឯកជនភាព
             </h2>
           </div>
 
-          <div class="px-6 py-5 overflow-y-auto flex-1 text-[14px] md:text-[15px] leading-[1.9] font-kantumruy text-gray-700 dark:text-slate-300">
-            <p class="mb-3">
+          <div class="flex-1 overflow-y-auto px-4 py-4 font-kantumruy text-[15px] leading-[1.8] text-slate-700 dark:text-slate-200 sm:px-6 sm:py-5 sm:text-[15px]">
+            <p class="mb-4 leading-[1.85] text-slate-700 dark:text-slate-200">
               សូមស្វាគមន៍មកកាន់ <strong>ប្រព័ន្ធបំណិនមន្ត្រីវិទ្យា</strong>។ មុនពេលបន្តប្រើប្រាស់ សូមអានលក្ខខណ្ឌខាងក្រោម៖
             </p>
-            <ul class="list-disc pl-5 space-y-2 mb-3">
+            <ul class="mb-3 list-disc space-y-3 pl-5 leading-[1.9] text-slate-600 marker:text-slate-500 dark:text-slate-200 dark:marker:text-slate-400">
               <li>ព័ត៌មានរបស់លោកអ្នក (ឈ្មោះ អ៊ីមែល រូបតំណាង) ប្រើសម្រាប់តែបញ្ជាក់អត្តសញ្ញាណ និងតារាងចំណាត់ថ្នាក់ប៉ុណ្ណោះ។</li>
               <li>យើងប្តេជ្ញាមិនចែករំលែកទិន្នន័យនេះទៅតតិយជនឡើយ។</li>
               <li>រាល់ខ្លឹមសារ វិញ្ញាសា និងសំណួរ-ចម្លើយនៅក្នុងប្រព័ន្ធនេះ ត្រូវបានដកស្រង់យ៉ាងសម្រិតសម្រាំង និងផ្អែកទាំងស្រុងលើឯកសារជាតិ លិខិតបទដ្ឋានគតិយុត្ត និងឯកសារផ្លូវការរបស់ក្រសួង-ស្ថាប័នជាធរមាន។ </li>
@@ -59,12 +59,12 @@ const handleAccept = async () => {
             
           </div>
 
-          <div class="px-6 py-4 border-t border-gray-100 dark:border-white/10 bg-[#f8fafc] dark:bg-slate-950/65">
+          <div class="border-t border-slate-200 bg-slate-50/80 px-4 py-4 dark:border-white/10 dark:bg-slate-950/65 sm:px-6">
             <label
-              class="flex items-start gap-3 cursor-pointer mb-4 p-3 rounded-xl border-2 transition-colors select-none"
+              class="mb-4 flex cursor-pointer select-none items-start gap-3 rounded-xl border-2 p-3.5 transition-colors"
               :class="accepted
                 ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 dark:border-emerald-400'
-                : 'border-gray-300 dark:border-slate-600 hover:border-gray-400 dark:hover:border-slate-500'"
+                : 'border-slate-200 bg-white dark:border-slate-600 dark:bg-slate-900/40 hover:border-slate-300 dark:hover:border-slate-500'"
             >
               <input
                 v-model="accepted"
@@ -72,10 +72,10 @@ const handleAccept = async () => {
                 class="sr-only peer"
               />
               <span
-                class="flex-shrink-0 mt-0.5 w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all"
+                class="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md border-2 transition-all"
                 :class="accepted
                   ? 'bg-emerald-500 border-emerald-500 dark:bg-emerald-400 dark:border-emerald-400'
-                  : 'bg-white border-gray-400 dark:bg-slate-800 dark:border-slate-500'"
+                  : 'border-slate-400 bg-white dark:border-slate-500 dark:bg-slate-800'"
               >
                 <svg
                   v-if="accepted"
@@ -89,17 +89,17 @@ const handleAccept = async () => {
                   <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </span>
-              <span class="font-kantumruy text-[14px] text-gray-800 dark:text-slate-200 leading-relaxed">
+              <span class="font-kantumruy text-[14px] leading-7 text-slate-800 dark:text-slate-100 sm:text-[15px]">
                 ខ្ញុំបានអាន និងយល់ព្រមនឹងលក្ខខណ្ឌប្រើប្រាស់ និងគោលការណ៍ឯកជនភាព។
               </span>
             </label>
 
-            <p v-if="errorMsg" class="text-red-500 font-kantumruy text-[13px] mb-3">{{ errorMsg }}</p>
+            <p v-if="errorMsg" class="mb-3 font-kantumruy text-[13px] text-red-500">{{ errorMsg }}</p>
 
             <button
               :disabled="!accepted || submitting"
               @click="handleAccept"
-              class="w-full bg-[#1e3a8a] dark:bg-amber-600 hover:bg-gray-800 dark:hover:bg-amber-500 disabled:opacity-50 disabled:cursor-not-allowed text-white px-5 py-3.5 rounded-2xl font-bold font-kantumruy text-[15px] md:text-[16px] shadow-lg active:scale-[0.98] transition-all"
+              class="w-full rounded-2xl bg-[#1e3a8a] px-5 py-3.5 font-kantumruy text-[15px] font-bold text-white shadow-[0_16px_32px_rgba(30,58,138,0.18)] transition-all active:scale-[0.98] hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-amber-600 dark:shadow-[0_16px_32px_rgba(217,119,6,0.18)] dark:hover:bg-amber-500 md:text-[16px]"
             >
               {{ submitting ? 'កំពុងរក្សាទុក...' : 'យល់ព្រម និងបន្ត' }}
             </button>

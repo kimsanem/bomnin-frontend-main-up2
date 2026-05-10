@@ -22,6 +22,7 @@ const profileData  = ref(null);
 const isLoading    = ref(true);
 const fetchError   = ref(null);
 const isUpgrading  = ref(false);
+const isVideoExpanded = ref(false);
 const payForm      = ref(null);
 
 const payUrl = ref('https://checkout-sandbox.payway.com.kh/api/payment-gateway/v1/payments/purchase');
@@ -69,6 +70,14 @@ const closeQr = () => {
     qrError.value   = '';
     qrLoading.value = false;
     qrCountdown.value = 300;
+};
+
+const openExpandedVideo = () => {
+    isVideoExpanded.value = true;
+};
+
+const closeExpandedVideo = () => {
+    isVideoExpanded.value = false;
 };
 // ─────────────────────────────────────────────────────────────
 
@@ -242,7 +251,7 @@ onUnmounted(stopTimers);
 
 <template>
   <div class="flex flex-1 flex-col font-kantumruy px-4 py-8 -mt-10 lg:-mt-6">
-    <div class="flex flex-1 flex-col w-full max-w-2xl mx-auto">
+    <div class="flex flex-1 flex-col w-full max-w-6xl mx-auto">
 
       <div v-if="isLoading" class="flex flex-col items-center justify-center py-20">
         <div class="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600 mb-4"></div>
@@ -256,7 +265,7 @@ onUnmounted(stopTimers);
         </button>
       </div>
 
-      <div v-else-if="profileData">
+      <div v-else-if="profileData" class="grid gap-8 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] xl:items-stretch">
         <div class="relative overflow-hidden rounded-[2.5rem] border border-white/70 bg-white/95 p-8 shadow-[0_32px_90px_rgba(15,23,42,0.22)] backdrop-blur-lg dark:border-white/10 dark:bg-slate-900/90 dark:shadow-[0_32px_100px_rgba(0,0,0,0.55)] md:p-12">
           <div class="absolute right-0 top-0 h-56 w-56 rounded-bl-full bg-gradient-to-bl from-blue-100/60 to-transparent dark:from-sky-500/10"></div>
           <div class="absolute bottom-0 left-0 h-40 w-40 rounded-tr-full bg-gradient-to-tr from-amber-100/70 to-transparent dark:from-amber-400/10"></div>
@@ -336,11 +345,25 @@ onUnmounted(stopTimers);
           </div>
         </div>
 
-        <div class="mt-8 w-full overflow-hidden rounded-[1.5rem] border-[3px] border-[#7dd3fc] bg-black shadow-[0_0_20px_rgba(125,211,252,0.5)] dark:shadow-[0_0_28px_rgba(125,211,252,0.36)]">
-          <div class="relative aspect-[2.5/4] w-full">
+        <div class="w-full self-stretch overflow-hidden rounded-[1.5rem] border-[3px] border-[#7dd3fc] bg-black shadow-[0_0_20px_rgba(125,211,252,0.5)] dark:shadow-[0_0_28px_rgba(125,211,252,0.36)] xl:mt-0 xl:h-full">
+          <div class="relative aspect-[2.5/4] min-h-[32rem] w-full xl:h-full xl:min-h-0 xl:aspect-auto">
             <div class="absolute left-1/2 top-5 z-20 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/20 bg-[#1e3a8a] px-5 py-2 text-[11px] font-bold tracking-widest text-white shadow-lg">
               កម្រិតទី {{ treeProgress.current_level }} ៖ {{ treeProgress.level_name }}
             </div>
+
+            <button
+              type="button"
+              class="absolute right-4 top-4 z-20 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/45 px-3 py-2 text-[11px] font-bold tracking-[0.14em] text-white shadow-lg backdrop-blur-md transition hover:bg-black/60"
+              @click="openExpandedVideo"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 3h6v6"></path>
+                <path d="M9 21H3v-6"></path>
+                <path d="M21 3l-7 7"></path>
+                <path d="M3 21l7-7"></path>
+              </svg>
+              
+            </button>
 
             <video
               :key="treeProgress.video_url"
@@ -386,6 +409,49 @@ onUnmounted(stopTimers);
   </div>
 
   <!-- ── QR Payment Modal (NEW) ───────────────────────────── -->
+  <Teleport to="body">
+    <Transition name="qr-fade">
+      <div
+        v-if="isVideoExpanded"
+        class="fixed inset-0 z-[9998] flex items-center justify-center p-4 font-kantumruy"
+        style="background:rgba(2,6,23,0.88);backdrop-filter:blur(10px)"
+        @click="closeExpandedVideo"
+      >
+        <div
+          class="relative w-full max-w-6xl overflow-hidden rounded-[2rem] border border-sky-300/40 bg-slate-950 shadow-[0_0_40px_rgba(56,189,248,0.24)]"
+          @click.stop
+        >
+          <button
+            type="button"
+            class="absolute right-4 top-4 z-30 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-slate-900/70 text-white backdrop-blur-md transition hover:bg-slate-800"
+            @click="closeExpandedVideo"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+
+          <div class="relative aspect-video w-full bg-black">
+            <div class="absolute left-1/2 top-5 z-20 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/20 bg-[#1e3a8a] px-5 py-2 text-[11px] font-bold tracking-widest text-white shadow-lg">
+              កម្រិតទី {{ treeProgress.current_level }} – {{ treeProgress.level_name }}
+            </div>
+
+            <video
+              :key="`${treeProgress.video_url}-expanded`"
+              :src="treeProgress.video_url"
+              autoplay
+              loop
+              muted
+              playsinline
+              class="absolute inset-0 h-full w-full object-contain"
+            ></video>
+          </div>
+        </div>
+      </div>
+    </Transition>
+  </Teleport>
+
   <Teleport to="body">
     <Transition name="qr-fade">
       <div v-if="showQr"

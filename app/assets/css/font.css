@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Koh+Santepheap:wght@400;700;900&display=swap');
+
 /* Moul Regular */
 @font-face {
   font-family: 'Moul';
@@ -33,4 +35,8 @@ body,
 
 .font-kantumruy {
   font-family: 'KantumruyPro', 'Kantumruy Pro', sans-serif;
+}
+
+.font-kohsantepheap {
+  font-family: 'Koh Santepheap', 'KantumruyPro', 'Kantumruy Pro', sans-serif;
 }

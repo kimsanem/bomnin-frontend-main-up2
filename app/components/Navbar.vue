@@ -173,46 +173,41 @@ watch(() => route.fullPath, () => {
             </span>
           </NuxtLink>
 
+          <NuxtLink
+            to="/pricing"
+            class="group flex h-8 shrink-0 items-center justify-center gap-1.5 rounded-full border border-violet-300/35 bg-gradient-to-r from-violet-500 to-indigo-500 px-3 text-white shadow-[0_0_24px_rgba(99,102,241,0.35)] transition-all duration-300 hover:scale-[1.02] hover:from-violet-400 hover:to-indigo-400 hover:shadow-[0_0_28px_rgba(129,140,248,0.48)] md:h-11 md:gap-2 md:px-5"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="hidden h-5 w-5 shrink-0 md:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 1v22"></path>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7H14.5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+            <span class="whitespace-nowrap font-kantumruy text-[10px] font-bold tracking-wide md:text-[14px] lg:text-[15px]">
+              Pricing
+            </span>
+          </NuxtLink>
+
           <button
             type="button"
-            class="group relative flex h-8 w-[4rem] shrink-0 items-center rounded-full border border-white/25 bg-white/12 p-1 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_26px_rgba(15,23,42,0.2)] backdrop-blur-md transition-all duration-300 hover:border-white/45 hover:bg-white/18 focus:outline-none focus:ring-2 focus:ring-yellow-300/70 dark:border-yellow-300/55 dark:bg-slate-950/65 md:h-11 md:w-[5.35rem]"
+            class="group relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-yellow-300/55 bg-white/12 text-amber-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_26px_rgba(15,23,42,0.2)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-yellow-200 hover:bg-white/18 focus:outline-none focus:ring-2 focus:ring-yellow-300/70 dark:border-yellow-300/55 dark:bg-slate-950/65 dark:text-sky-100 md:h-11 md:w-11"
             :aria-label="theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
             :aria-pressed="theme === 'dark'"
             @click="toggleTheme"
           >
-            <span class="absolute left-1.5 text-amber-300 drop-shadow-[0_0_8px_rgba(252,211,77,0.9)] transition-all duration-300 md:left-2" :class="theme === 'dark' ? 'opacity-100' : 'opacity-100'">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 md:h-5 md:w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="4"></circle>
-                <path d="M12 2v2"></path>
-                <path d="M12 20v2"></path>
-                <path d="m4.93 4.93 1.41 1.41"></path>
-                <path d="m17.66 17.66 1.41 1.41"></path>
-                <path d="M2 12h2"></path>
-                <path d="M20 12h2"></path>
-                <path d="m6.34 17.66-1.41 1.41"></path>
-                <path d="m19.07 4.93-1.41 1.41"></path>
-              </svg>
-            </span>
-            <span class="absolute right-1.5 text-sky-100 drop-shadow-[0_0_8px_rgba(186,230,253,0.72)] transition-all duration-300 md:right-2" :class="theme === 'dark' ? 'opacity-100' : 'opacity-70'">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 md:h-5 md:w-5" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M21 14.5A8.5 8.5 0 0 1 9.5 3a7 7 0 1 0 11.5 11.5Z"></path>
-              </svg>
-            </span>
-            <span
-              class="relative z-10 flex h-6 w-6 items-center justify-center rounded-full bg-white text-amber-500 shadow-[0_8px_20px_rgba(15,23,42,0.28)] transition-transform duration-300 ease-out md:h-9 md:w-9"
-              :class="theme === 'dark' ? 'translate-x-[2rem] text-[#1e3a8a] shadow-[0_0_24px_rgba(125,211,252,0.36)] md:translate-x-[2.55rem]' : 'translate-x-0'"
-            >
-              <svg v-if="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 md:h-4 md:w-4" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M21 14.5A8.5 8.5 0 0 1 9.5 3a7 7 0 1 0 11.5 11.5Z"></path>
-              </svg>
-              <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 md:h-4 md:w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="4"></circle>
-                <path d="M12 2v2"></path>
-                <path d="M12 20v2"></path>
-                <path d="M2 12h2"></path>
-                <path d="M20 12h2"></path>
-              </svg>
-            </span>
+            <span class="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.22),transparent_65%)] opacity-80 transition-opacity duration-300 group-hover:opacity-100"></span>
+            <svg v-if="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" class="relative z-10 h-4 w-4 fill-current drop-shadow-[0_0_10px_rgba(186,230,253,0.55)] md:h-5 md:w-5" viewBox="0 0 24 24">
+              <path d="M21 14.5A8.5 8.5 0 0 1 9.5 3a7 7 0 1 0 11.5 11.5Z"></path>
+            </svg>
+            <svg v-else xmlns="http://www.w3.org/2000/svg" class="relative z-10 h-4 w-4 drop-shadow-[0_0_10px_rgba(252,211,77,0.55)] md:h-5 md:w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2"></path>
+              <path d="M12 20v2"></path>
+              <path d="m4.93 4.93 1.41 1.41"></path>
+              <path d="m17.66 17.66 1.41 1.41"></path>
+              <path d="M2 12h2"></path>
+              <path d="M20 12h2"></path>
+              <path d="m6.34 17.66-1.41 1.41"></path>
+              <path d="m19.07 4.93-1.41 1.41"></path>
+            </svg>
           </button>
 
           <ClientOnly>

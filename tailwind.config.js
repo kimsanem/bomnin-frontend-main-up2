@@ -13,6 +13,7 @@ module.exports = {
       fontFamily: {
         moul: ['Moul', 'sans-serif'],
         kantumruy: ['KantumruyPro', 'sans-serif'],
+        kohsantepheap: ['Koh Santepheap', 'KantumruyPro', 'sans-serif'],
       },
     },
   },
