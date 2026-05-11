@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, nextTick, onUnmounted, computed } from 'vue';
+import ECertificateMinimal from '@/components/ECertificateMinimal.vue';
 
 useHead({
   script: [
@@ -152,6 +153,19 @@ const getOptimizedAvatar = (url, name) => {
     if (url.includes('googleusercontent.com')) return url.split('=')[0] + '=s128-c';
     return url;
 };
+
+const certificateData = computed(() => ({
+    name: profileData.value?.name || '',
+    learnerId: profileData.value?.id ? `SCT-${profileData.value.id}` : '',
+    email: profileData.value?.email || '',
+    totalHours: '',
+    solvedMcqs: '',
+    totalSeason: '',
+    totalSeasonRange: '',
+    highestRank: profileData.value?.rank ? `Rank #${profileData.value.rank}` : '',
+    treeOfLife: treeProgress.value?.current_level ? `Tree of Life LV.${treeProgress.value.current_level}` : '',
+    effectiveDate: profileData.value?.joined_at || '',
+}));
 
 // ── handleUpgrade — replaced to show QR modal (NEW) ──────────
 const handleUpgrade = async () => {
@@ -383,6 +397,67 @@ onUnmounted(stopTimers);
               <div class="h-1.5 w-full overflow-hidden rounded-full bg-gray-600/50">
                 <div class="h-full rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.8)] transition-all duration-700" :style="{ width: `${treeProgress.progress_percentage}%` }"></div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="md:col-span-3 xl:col-span-2">
+          <ECertificateMinimal
+            :name="certificateData.name"
+            :learner-id="certificateData.learnerId"
+            :email="certificateData.email"
+            :total-hours="certificateData.totalHours"
+            :solved-mcqs="certificateData.solvedMcqs"
+            :total-season="certificateData.totalSeason"
+            :total-season-range="certificateData.totalSeasonRange"
+            :highest-rank="certificateData.highestRank"
+            :tree-of-life="certificateData.treeOfLife"
+            :effective-date="certificateData.effectiveDate"
+          />
+        </div>
+
+        <div class="md:col-span-3 xl:col-span-2 space-y-8">
+          <div class="bg-white rounded-3xl shadow-lg border border-gray-100 p-6 md:p-8 relative overflow-hidden dark:border-white/10 dark:bg-slate-900/80 dark:shadow-[0_24px_70px_rgba(0,0,0,0.34)] dark:backdrop-blur-xl">
+            <div class="absolute inset-0 bg-gradient-to-r from-gray-50 to-white opacity-50 z-0 dark:from-slate-950/70 dark:to-slate-900/30 dark:opacity-100"></div>
+
+            <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              <div class="space-y-6">
+                <h3 class="font-kantumruy text-2xl text-gray-800 text-center dark:text-slate-100">"Tree of Life"</h3>
+                <p class="text-gray-600 italic leading-relaxed text-md md:text-lg dark:text-slate-200">
+                  "Tree of Life" ឬ "ដើមឈើជីវិត" តំណាងឱ្យការលូតលាស់នៃចំណេះដឹង។ ការសិក្សាប្រៀបដូចជាការដាំដើមឈើ ចាប់ផ្តើមពីគ្រាប់ពូជ រហូតដល់ក្លាយជាដើមឈើធំដែលផ្ដល់ផ្លែផ្កា។ ប្រព័ន្ធរបស់យើងប្រើប្រាស់វិធីសាស្ត្រ Gamification ដើម្បីធ្វើឱ្យការសិក្សាកាន់តែមានប្រសិទ្ធភាព។
+                </p>
+                <div class="flex justify-center md:justify-start items-center gap-6 md:gap-12 mt-4">
+                  <div class="flex flex-col items-center">
+                    <img :src="'/icons/tree_evolution/1.png'" :class="'w-7 h-7 object-contain mb-4'" alt="Seedling">
+                    <span class="font-kantumruy text-md md:text-lg text-gray-600 dark:text-slate-300">គ្រាប់ពូជ</span>
+                  </div>
+                  <div class="text-gray-300 dark:text-slate-500">➜</div>
+                  <div class="flex flex-col items-center">
+                    <img :src="'/icons/tree_evolution/2.png'" :class="'w-7 h-7 object-contain mb-4'" alt="Sapling">
+                    <span class="font-kantumruy text-md md:text-lg text-gray-600 dark:text-slate-300">កូនឈើ</span>
+                  </div>
+                  <div class="text-gray-300 dark:text-slate-500">➜</div>
+                  <div class="flex flex-col items-center">
+                    <img :src="'/icons/tree_evolution/3.png'" :class="'w-7 h-7 object-contain mb-4'" alt="Mature Tree">
+                    <span class="font-kantumruy text-md md:text-lg text-gray-600 dark:text-slate-300">ដើមឈើធំ</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex justify-center">
+                <div class="w-full max-w-[400px] h-full rounded-2xl overflow-hidden shadow-lg border-4 border-white transform hover:scale-105 transition-transform duration-500 dark:border-white/10 dark:shadow-[0_24px_60px_rgba(0,0,0,0.35)]">
+                  <img :src="'/icons/tree_evolution/4.png'" class="w-full h-full object-cover" alt="Tree">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="px-2">
+            <div class="bg-white border-4 double-border-gold rounded-2xl p-8 md:p-12 text-center shadow-md relative max-w-4xl mx-auto dark:bg-slate-900/80 dark:shadow-[0_24px_70px_rgba(0,0,0,0.3)]">
+              <h2 class="font-kantumruy text-2xl leading-none text-red-800 mb-6">ការប្តេជ្ញាចិត្តរបស់យើង</h2>
+              <p class="text-gray-600 leading-relaxed max-w-3xl mx-auto font-medium text-md md:text-xl dark:text-slate-200">
+                ការប្តេជ្ញាចិត្តដ៏មោះមុតបំផុតរបស់យើង គឺការរក្សានូវ «តម្លាភាព និងភាពត្រឹមត្រូវ» ជាដាច់ខាត ។ រាល់សំណួរ ចម្លើយ និង «ខ្លឹមសារសង្ខេប» ទាំងអស់នៅក្នុងប្រព័ន្ធនេះ មិនមែនជាការប្រឌិតឡើយ ប៉ុន្តែត្រូវបានចម្រាញ់ចេញពីឯកសារគោលនយោបាយ ច្បាប់ និងបទដ្ឋានយោងផ្លូវការដែលត្រូវបានផ្ទៀងផ្ទាត់យ៉ាងហ្មត់ចត់បំផុត។ យើងធានាជូននូវប្រភពឯកសារដែលច្បាស់លាស់ ដើម្បីឱ្យអ្នកសិក្សាទទួលបាននូវចំណេះដឹងដែលជាការពិត និងអាចយកទៅប្រើប្រាស់ជាផ្លូវការបានដោយទំនុកចិត្តខ្ពស់បំផុត។
+              </p>
             </div>
           </div>
         </div>
