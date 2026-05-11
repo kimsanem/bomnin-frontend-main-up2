@@ -3,8 +3,9 @@ import { computed } from 'vue';
 
 const { isOpen } = useSubscribeModal();
 
+const authToken = useCookie('auth_token', { maxAge: 60 * 60 * 24 * 30, path: '/' });
 const user = useCookie('user_data', { maxAge: 60 * 60 * 24 * 30, path: '/' });
-const showTermsModal = computed(() => !!user.value && !user.value.terms_accepted_at);
+const showTermsModal = computed(() => !!authToken.value && !!user.value && !user.value.terms_accepted_at);
 </script>
 
 <template>
