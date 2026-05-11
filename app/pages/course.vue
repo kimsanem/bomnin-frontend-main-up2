@@ -85,9 +85,9 @@ const fetchTreeProgress = async () => {
 const LOCKED_HONOR_ROLL = [
     { rank: 1,  name: 'enoeurng rith',                  score: 2777 },
     { rank: 2,  name: 'Phan Chakriya',                  score: 2113 },
-    { rank: 3,  name: 'ស្រីនុត ឃ័ម',                       score: 1972 },
+    { rank: 3,  name: 'ស្រីនុត យ៉ែម',                       score: 1972 },
     { rank: 4,  name: 'Ket Sophal',                     score: 1867 },
-    { rank: 5,  name: 'ធេង ស៊ូទៀង Cheng suteang',         score: 1456 },
+    { rank: 5,  name: 'ឆេង ស៊ូទៀង Cheng suteang',         score: 1456 },
     { rank: 6,  name: 'Sakk',                           score: 1440 },
     { rank: 7,  name: 'Si Pheav',                       score: 1419 },
     { rank: 8,  name: 'Seng Pricha',                    score:  877 },
@@ -249,6 +249,7 @@ const saveBio = async () => {
 onMounted(() => {
     fetchUser();
     fetchLeaderboard();
+    fetchMyMonthlyRank();
 });
 
 // FETCH CATEGORIES
@@ -405,21 +406,20 @@ const avatarRingStyle = computed(() => {
     };
 });
 
-const currentUserRank = computed(() => {
-    if (!user.value || leaderboardUsers.value.length === 0) return null;
+// Pulled from /user/profile-dashboard so it matches the user's position on
+// the monthly season leaderboard, not the frozen honor-roll snapshot.
+const currentUserRank = ref(null);
 
-    const currentId = user.value.id;
-    const currentEmail = user.value.email;
-    const currentName = user.value.name;
-
-    const match = leaderboardUsers.value.find((item) => {
-        return (currentId && item.id === currentId)
-            || (currentEmail && item.email === currentEmail)
-            || (currentName && item.name === currentName);
-    });
-
-    return match?.rank || null;
-});
+const fetchMyMonthlyRank = async () => {
+    if (!authToken.value) return;
+    try {
+        const res = await $api('/user/profile-dashboard');
+        currentUserRank.value = res?.user?.rank ?? null;
+    } catch (err) {
+        console.error("Failed to fetch monthly rank:", err);
+        currentUserRank.value = null;
+    }
+};
 
 const toKhmerNumeral = (num) => {
     if (num == null) return '០';
