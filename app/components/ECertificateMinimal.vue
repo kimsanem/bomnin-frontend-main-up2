@@ -80,54 +80,52 @@ const qrPattern = [
 </script>
 
 <template>
-  <section class="bg-white p-4 text-slate-900 dark:bg-[radial-gradient(circle_at_top,rgba(30,41,59,0.78),rgba(15,23,42,0.96)_42%,rgba(2,6,23,1)_100%)] sm:p-6 lg:p-8">
+  <section class="flex items-center justify-center overflow-x-hidden bg-white p-3 text-slate-900 dark:bg-[radial-gradient(circle_at_top,rgba(30,41,59,0.78),rgba(15,23,42,0.96)_42%,rgba(2,6,23,1)_100%)] sm:p-6 lg:p-8">
     <div class="mx-auto flex w-full justify-center">
       <div class="w-full max-w-[297mm]">
         <div class="certificate-shell certificate-a4 mx-auto w-full rounded-[1.75rem] p-[10px] shadow-[0_24px_70px_rgba(15,23,42,0.12)] dark:shadow-[0_28px_90px_rgba(0,0,0,0.55)]">
-          <div class="certificate-frame relative flex h-full flex-col overflow-hidden rounded-[1.45rem] bg-white px-5 py-4 sm:px-8 sm:py-6 lg:px-12 lg:py-7">
-            <div class="certificate-ornament pointer-events-none absolute inset-[12px] rounded-[1.2rem]" aria-hidden="true"></div>
-
-            <header class="relative z-10 border-b border-[#d8c7a0] pb-5 text-center">
+          <div class="certificate-frame relative flex h-full flex-col rounded-[1.45rem] bg-white px-5 py-3 sm:px-8 sm:py-4 lg:px-12 lg:py-5">
+            <header class="relative z-10 border-b border-[#d8c7a0] pb-4 text-center">
               <div class="flex items-start justify-between gap-4">
 
                 <!-- logo image  -->
                 <div class="mx-auto flex flex-col items-center">
-                  <div class="mb-3 flex h-20 w-20 items-center justify-center rounded-full border border-[#d8c7a0] bg-[radial-gradient(circle_at_30%_30%,rgba(250,245,231,1),rgba(240,225,182,0.95))] p-3 shadow-[0_10px_22px_rgba(146,113,44,0.14)] sm:h-24 sm:w-24">
+                  <div class="mb-2 flex h-16 w-16 items-center justify-center rounded-full border border-[#d8c7a0] bg-transparent p-2.5 shadow-none sm:h-20 sm:w-20">
                     <img src="/logo.png" alt="Scientia Officialis Logo" class="h-full w-full object-contain" />
                   </div>
                   
                   <h1 class="certificate-title text-3xl sm:text-4xl lg:text-[2.9rem]">
                     វិញ្ញាបនបត្រ
                   </h1>
-                  <p class="mt-2 font-kantumruy text-base text-slate-700 sm:text-lg">
+                  <p class="mt-1.5 font-kantumruy text-sm text-slate-700 sm:text-base">
                     លិខិតបញ្ជាក់ការខិតខំប្រឹងប្រែង និងសមិទ្ធផលសិក្សា
                   </p>
                 </div>
               </div>
             </header>
 
-            <div class="relative z-10 py-3 text-center sm:py-4">
+            <div class="relative z-10 py-2 text-center sm:py-3">
               <p class="font-kantumruy text-sm tracking-[0.18em] text-slate-500 sm:text-base">
                 ប្រគល់ជូន
               </p>
 
               <!-- // show the english name as the upper case -->
-              <h2 class="mt-2 font-kohsantepheap text-3xl font-black tracking-[0.08em] text-slate-950 sm:text-4xl lg:text-[2.8rem]">
+              <h2 class="mt-1.5 font-kohsantepheap text-3xl font-black tracking-[0.08em] text-slate-950 sm:text-4xl lg:text-[2.6rem]">
                 {{ displayName || ' ' }}
               </h2>
               <div class="mx-auto mt-2 h-[2px] w-52 max-w-full rounded-full bg-[linear-gradient(90deg,transparent,rgba(181,138,42,0.95),transparent)]"></div>
-              <p class="mt-2 font-kantumruy text-sm text-slate-500 sm:text-base">
+              <p class="mt-1.5 font-kantumruy text-sm text-slate-500 sm:text-base">
                 {{ identityLine || ' ' }}
               </p>
             </div>
 
-            <div class="relative z-10 grid gap-5 border-y border-[#e2d5b5] py-5 sm:grid-cols-2 lg:gap-x-8 lg:gap-y-4 lg:py-6">
+            <div class="relative z-10 grid gap-4 border-y border-[#e2d5b5] py-4 sm:grid-cols-2 lg:gap-x-8 lg:gap-y-3 lg:py-4">
               <div
                 v-for="metric in metrics"
                 :key="metric.label"
-                class="flex items-start gap-4 rounded-2xl border border-[#efe5d0] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(250,246,238,0.96))] px-4 py-4"
+                class="flex items-start gap-4 rounded-2xl border border-[#efe5d0] bg-transparent px-4 py-3"
               >
-                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#d8c7a0] bg-[#fbf7ee] text-[#8b6a22] shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]">
+                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#d8c7a0] bg-transparent text-[#8b6a22] shadow-none">
                   <svg v-if="metric.icon === 'award'" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="8" r="5"></circle>
                     <path d="M8.5 13.5 7 21l5-2.8L17 21l-1.5-7.5"></path>
@@ -159,7 +157,7 @@ const qrPattern = [
 
                 <div class="min-w-0 flex-1">
                   <p class="font-kantumruy text-sm font-bold text-slate-700 sm:text-[15px]">{{ metric.label }}</p>
-                  <p class="mt-1 font-sans text-xl font-semibold text-slate-950 sm:text-2xl">
+                  <p class="mt-1 font-sans text-xl font-semibold text-slate-950 sm:text-[1.7rem]">
                     {{ metric.value || ' ' }}
                   </p>
                   <p v-if="metric.subvalue" class="mt-1 font-kantumruy text-sm text-slate-500">
@@ -210,21 +208,22 @@ const qrPattern = [
 
 <style scoped>
 .certificate-shell {
-  background:
-    linear-gradient(135deg, rgba(29, 53, 87, 0.9), rgba(16, 36, 64, 0.96)),
-    linear-gradient(135deg, rgba(214, 181, 101, 0.3), rgba(214, 181, 101, 0));
+  background: #fbf4e6;
+  border: 1px solid #ead7b3;
 }
 
 .certificate-a4 {
+  width: 100%;
+  max-width: 297mm;
   aspect-ratio: 297 / 210;
-  min-height: 210mm;
+  height: auto;
+  min-height: 0;
 }
 
 .certificate-frame {
-  border: 1px solid rgba(187, 153, 88, 0.5);
+  border: 1px solid #efe2c7;
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.75),
-    inset 0 0 0 7px rgba(247, 241, 225, 0.8);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.98);
 }
 
 .certificate-title {
@@ -238,40 +237,6 @@ const qrPattern = [
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-}
-
-.certificate-ornament {
-  border: 1px solid rgba(187, 153, 88, 0.35);
-  box-shadow: inset 0 0 0 1px rgba(210, 179, 111, 0.18);
-}
-
-.certificate-ornament::before,
-.certificate-ornament::after {
-  content: '';
-  position: absolute;
-  inset: 12px;
-  border-radius: 1rem;
-  pointer-events: none;
-}
-
-.certificate-ornament::before {
-  border: 1px solid rgba(37, 59, 95, 0.14);
-  background:
-    radial-gradient(circle at 18px 18px, rgba(193, 153, 83, 0.18) 0 2px, transparent 2.5px),
-    radial-gradient(circle at calc(100% - 18px) 18px, rgba(193, 153, 83, 0.18) 0 2px, transparent 2.5px),
-    radial-gradient(circle at 18px calc(100% - 18px), rgba(193, 153, 83, 0.18) 0 2px, transparent 2.5px),
-    radial-gradient(circle at calc(100% - 18px) calc(100% - 18px), rgba(193, 153, 83, 0.18) 0 2px, transparent 2.5px);
-}
-
-.certificate-ornament::after {
-  inset: 20px;
-  border: 1px dashed rgba(190, 158, 94, 0.12);
-  background:
-    radial-gradient(circle at 0 50%, rgba(197, 164, 100, 0.1) 0 7px, transparent 7.5px) left center / 22px 22px repeat-y,
-    radial-gradient(circle at 100% 50%, rgba(197, 164, 100, 0.1) 0 7px, transparent 7.5px) right center / 22px 22px repeat-y,
-    radial-gradient(circle at 50% 0, rgba(197, 164, 100, 0.08) 0 7px, transparent 7.5px) top center / 22px 22px repeat-x,
-    radial-gradient(circle at 50% 100%, rgba(197, 164, 100, 0.08) 0 7px, transparent 7.5px) bottom center / 22px 22px repeat-x;
-  opacity: 0.9;
 }
 
 .qr-verify {
@@ -357,6 +322,11 @@ const qrPattern = [
 }
 
 @media print {
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+
   .certificate-a4 {
     width: 297mm;
     min-width: 297mm;

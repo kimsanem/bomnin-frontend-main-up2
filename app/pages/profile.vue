@@ -264,7 +264,7 @@ onUnmounted(stopTimers);
 </script>
 
 <template>
-  <div class="flex flex-1 flex-col font-kantumruy px-4 py-8 -mt-10 lg:-mt-6">
+  <div class="flex flex-1 flex-col font-kantumruy px-3 py-6 -mt-4 sm:px-4 sm:py-8 sm:-mt-8 lg:-mt-6">
     <div class="flex flex-1 flex-col w-full max-w-6xl mx-auto">
 
       <div v-if="isLoading" class="flex flex-col items-center justify-center py-20">
@@ -279,8 +279,8 @@ onUnmounted(stopTimers);
         </button>
       </div>
 
-      <div v-else-if="profileData" class="grid gap-8 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] xl:items-stretch">
-        <div class="relative overflow-hidden rounded-[2.5rem] border border-white/70 bg-white/95 p-8 shadow-[0_32px_90px_rgba(15,23,42,0.22)] backdrop-blur-lg dark:border-white/10 dark:bg-slate-900/90 dark:shadow-[0_32px_100px_rgba(0,0,0,0.55)] md:p-12">
+      <div v-else-if="profileData" class="grid gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] xl:items-stretch md:gap-8">
+        <div class="relative overflow-hidden rounded-[2rem] border border-white/70 bg-white/95 p-6 shadow-[0_32px_90px_rgba(15,23,42,0.22)] backdrop-blur-lg dark:border-white/10 dark:bg-slate-900/90 dark:shadow-[0_32px_100px_rgba(0,0,0,0.55)] md:rounded-[2.5rem] md:p-12">
           <div class="absolute right-0 top-0 h-56 w-56 rounded-bl-full bg-gradient-to-bl from-blue-100/60 to-transparent dark:from-sky-500/10"></div>
           <div class="absolute bottom-0 left-0 h-40 w-40 rounded-tr-full bg-gradient-to-tr from-amber-100/70 to-transparent dark:from-amber-400/10"></div>
           <div class="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent dark:via-white/20"></div>
@@ -360,7 +360,7 @@ onUnmounted(stopTimers);
         </div>
 
         <div class="w-full self-stretch overflow-hidden rounded-[1.5rem] border-[3px] border-[#7dd3fc] bg-black shadow-[0_0_20px_rgba(125,211,252,0.5)] dark:shadow-[0_0_28px_rgba(125,211,252,0.36)] xl:mt-0 xl:h-full">
-          <div class="relative aspect-[2.5/4] min-h-[32rem] w-full xl:h-full xl:min-h-0 xl:aspect-auto">
+          <div class="relative aspect-[2.5/4] min-h-[24rem] w-full sm:min-h-[28rem] xl:h-full xl:min-h-0 xl:aspect-auto">
             <div class="absolute left-1/2 top-5 z-20 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/20 bg-[#1e3a8a] px-5 py-2 text-[11px] font-bold tracking-widest text-white shadow-lg">
               កម្រិតទី {{ treeProgress.current_level }} ៖ {{ treeProgress.level_name }}
             </div>
@@ -401,7 +401,7 @@ onUnmounted(stopTimers);
           </div>
         </div>
 
-        <div class="md:col-span-3 xl:col-span-2">
+        <div class="md:col-span-3 xl:col-span-2 overflow-hidden rounded-[1.5rem]">
           <ECertificateMinimal
             :name="certificateData.name"
             :learner-id="certificateData.learnerId"
