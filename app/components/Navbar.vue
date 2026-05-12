@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { isEmbeddedBrowserEnvironment } from '~/utils/browser';
 
 const router = useRouter();
 const route = useRoute();
@@ -27,12 +28,10 @@ const goToProfile = async () => {
 
 const detectEmbeddedBrowser = () => {
   if (typeof navigator === 'undefined') return false;
-  const ua = navigator.userAgent || '';
-  const isExplicitInApp = /FBAN|FBAV|Instagram|Messenger|Line\/|MicroMessenger|Telegram|TikTok|Snapchat|Zalo|FB_IAB/i.test(ua);
-  const isAndroidWebView = /; wv\)|\bwv\b|Version\/[\d.]+.*Chrome\/[\d.]+ Mobile/i.test(ua);
-  const isIosInApp = /iPhone|iPad|iPod/i.test(ua) && /AppleWebKit/i.test(ua) && !/Safari/i.test(ua);
-
-  return isExplicitInApp || isAndroidWebView || isIosInApp;
+  return isEmbeddedBrowserEnvironment(
+    navigator.userAgent || '',
+    typeof document !== 'undefined' ? document.referrer : '',
+  );
 };
 
 const copyCurrentUrl = async () => {

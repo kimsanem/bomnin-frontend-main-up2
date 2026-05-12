@@ -1,6 +1,7 @@
 // plugins/google-login.client.ts
 
 import { GoogleLogin, googleSdkLoaded } from 'vue3-google-login'
+import { isEmbeddedBrowserEnvironment } from '~/utils/browser'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig()
@@ -14,12 +15,10 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('GoogleLogin', GoogleLogin)
 
   const isEmbeddedBrowser = () => {
-    const ua = window.navigator.userAgent || ''
-    const isExplicitInApp = /FBAN|FBAV|Instagram|Messenger|Line\/|MicroMessenger|Telegram|TikTok|Snapchat|Zalo|FB_IAB/i.test(ua)
-    const isAndroidWebView = /; wv\)|\bwv\b|Version\/[\d.]+.*Chrome\/[\d.]+ Mobile/i.test(ua)
-    const isIosInApp = /iPhone|iPad|iPod/i.test(ua) && /AppleWebKit/i.test(ua) && !/Safari/i.test(ua)
-
-    return isExplicitInApp || isAndroidWebView || isIosInApp
+    return isEmbeddedBrowserEnvironment(
+      window.navigator.userAgent || '',
+      document.referrer || '',
+    )
   }
 
   const warmGoogleSdk = () => {
@@ -35,6 +34,6 @@ export default defineNuxtPlugin((nuxtApp) => {
   if ('requestIdleCallback' in window) {
     window.requestIdleCallback(warmGoogleSdk, { timeout: 2500 })
   } else {
-    window.setTimeout(warmGoogleSdk, 1200)
+    globalThis.setTimeout(warmGoogleSdk, 1200)
   }
 })
