@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { isEmbeddedBrowserEnvironment, isMobileBrowserEnvironment } from '~/utils/browser';
+import { isEmbeddedBrowserEnvironment } from '~/utils/browser';
 
 const router = useRouter();
 const route = useRoute();
@@ -15,7 +15,6 @@ const isLoading = ref(false);
 const isLoginModalOpen = useState('loginModal', () => false);
 const isCheckingSession = ref(!!authToken.value && !user.value);
 const isEmbeddedBrowser = ref(false);
-const isMobileBrowser = ref(false);
 const copiedBrowserLink = ref(false);
 const currentPageUrl = ref('/');
 const { theme, toggleTheme } = useTheme();
@@ -35,18 +34,7 @@ const detectEmbeddedBrowser = () => {
   );
 };
 
-const detectMobileBrowser = () => {
-  if (typeof navigator === 'undefined') return false;
-  const uaMobile = isMobileBrowserEnvironment(navigator.userAgent || '');
-  const touchDevice = typeof window !== 'undefined'
-    && (window.navigator.maxTouchPoints > 0
-      || window.matchMedia?.('(pointer: coarse)').matches
-      || window.innerWidth < 1024);
-
-  return uaMobile || !!touchDevice;
-};
-
-const shouldAvoidGooglePopup = computed(() => isEmbeddedBrowser.value || isMobileBrowser.value);
+const shouldAvoidGooglePopup = computed(() => isEmbeddedBrowser.value);
 
 const copyCurrentUrl = async () => {
   if (typeof window === 'undefined' || !navigator?.clipboard) return;
@@ -114,7 +102,6 @@ const handleImageError = (event) => {
 
 onMounted(async () => {
   isEmbeddedBrowser.value = detectEmbeddedBrowser();
-  isMobileBrowser.value = detectMobileBrowser();
   if (typeof window !== 'undefined') {
     currentPageUrl.value = window.location.href;
   }
