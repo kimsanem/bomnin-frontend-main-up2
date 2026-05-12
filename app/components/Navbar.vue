@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { isEmbeddedBrowserEnvironment } from '~/utils/browser';
+import { isEmbeddedBrowserEnvironment, isMobileBrowserEnvironment } from '~/utils/browser';
 
 const router = useRouter();
 const route = useRoute();
@@ -15,6 +15,8 @@ const isLoading = ref(false);
 const isLoginModalOpen = useState('loginModal', () => false);
 const isCheckingSession = ref(!!authToken.value && !user.value);
 const isEmbeddedBrowser = ref(false);
+const isMobileBrowser = ref(false);
+const showBrowserHelper = ref(false);
 const copiedBrowserLink = ref(false);
 const currentPageUrl = ref('/');
 const { theme, toggleTheme } = useTheme();
@@ -32,6 +34,11 @@ const detectEmbeddedBrowser = () => {
     navigator.userAgent || '',
     typeof document !== 'undefined' ? document.referrer : '',
   );
+};
+
+const detectMobileBrowser = () => {
+  if (typeof navigator === 'undefined') return false;
+  return isMobileBrowserEnvironment(navigator.userAgent || '');
 };
 
 const shouldAvoidGooglePopup = computed(() => isEmbeddedBrowser.value);
@@ -102,6 +109,8 @@ const handleImageError = (event) => {
 
 onMounted(async () => {
   isEmbeddedBrowser.value = detectEmbeddedBrowser();
+  isMobileBrowser.value = detectMobileBrowser();
+  showBrowserHelper.value = isEmbeddedBrowser.value || isMobileBrowser.value;
   if (typeof window !== 'undefined') {
     currentPageUrl.value = window.location.href;
   }
@@ -377,7 +386,7 @@ const isMenuItemActive = (to) => route.path === to;
               </div>
 
               <div
-                v-if="shouldAvoidGooglePopup"
+                v-if="showBrowserHelper"
                 class="w-full rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4 text-left dark:border-amber-300/25 dark:bg-amber-400/10"
               >
                 <p class="font-kantumruy text-sm font-bold text-amber-900 dark:text-amber-100">
@@ -403,10 +412,18 @@ const isMenuItemActive = (to) => route.path === to;
                   >
                     {{ copiedBrowserLink ? 'បានចម្លងតំណភ្ជាប់' : 'ចម្លងតំណភ្ជាប់' }}
                   </button>
+                  <button
+                    v-if="!isEmbeddedBrowser"
+                    type="button"
+                    @click="showBrowserHelper = false"
+                    class="inline-flex items-center justify-center rounded-full border border-amber-300/70 px-4 py-2 text-sm font-bold text-amber-900 transition hover:bg-amber-100 dark:border-amber-300/30 dark:text-amber-100 dark:hover:bg-amber-300/10"
+                  >
+                    Continue Here
+                  </button>
                 </div>
               </div>
 
-              <div v-else-if="hasGoogleClientId" class="transform transition-transform duration-300 hover:scale-105">
+              <div v-if="!showBrowserHelper && hasGoogleClientId" class="transform transition-transform duration-300 hover:scale-105">
                 <GoogleLogin :client-id="config.public.googleClientId" :callback="handleGoogleLoginSuccess" />
               </div>
 
