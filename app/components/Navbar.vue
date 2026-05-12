@@ -28,8 +28,11 @@ const goToProfile = async () => {
 const detectEmbeddedBrowser = () => {
   if (typeof navigator === 'undefined') return false;
   const ua = navigator.userAgent || '';
+  const isExplicitInApp = /FBAN|FBAV|Instagram|Messenger|Line\/|MicroMessenger|Telegram|TikTok|Snapchat|Zalo|FB_IAB/i.test(ua);
+  const isAndroidWebView = /; wv\)|\bwv\b|Version\/[\d.]+.*Chrome\/[\d.]+ Mobile/i.test(ua);
+  const isIosInApp = /iPhone|iPad|iPod/i.test(ua) && /AppleWebKit/i.test(ua) && !/Safari/i.test(ua);
 
-  return /FBAN|FBAV|Instagram|Messenger|Line\/|MicroMessenger|wv\)|Telegram|TikTok|Snapchat/i.test(ua);
+  return isExplicitInApp || isAndroidWebView || isIosInApp;
 };
 
 const copyCurrentUrl = async () => {
