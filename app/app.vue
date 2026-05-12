@@ -1,8 +1,7 @@
 <script setup>
 import { ref, provide, onBeforeUnmount, onMounted, watch } from 'vue';
 
-const authToken = useCookie('auth_token', { maxAge: 60 * 60 * 24 * 30, path: '/' })
-const userData = useCookie('user_data', { maxAge: 60 * 60 * 24 * 30, path: '/' })
+const { authToken, userData } = useAuthState()
 const hasHydratedAuth = ref(false)
 
 // --- Global Music Player Logic ---

@@ -7,7 +7,7 @@ const config = useRuntimeConfig();
 const aiBaseUrl = config.public.aiBase;
 
 // --- AUTH STATE ---
-const authToken = useCookie('auth_token');
+const { authToken } = useAuthState();
 const isLoggedIn = computed(() => !!authToken.value);
 
 

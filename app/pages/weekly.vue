@@ -18,7 +18,7 @@ const searchText = ref('');
 const isModalOpen = ref(false);
 const selectedUser = ref(null);
 
-const currentUser = useCookie('user_data');
+const { userData: currentUser } = useAuthState();
 
 // --- 2. FETCH DATA FROM LARAVEL ---
 const fetchLeaderboard = async () => {

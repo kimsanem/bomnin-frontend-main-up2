@@ -1,7 +1,7 @@
 export const useAuth = () => {
   const user = useState("user", () => null)
   const config = useRuntimeConfig()
-  const token = useCookie("auth_token")
+  const { authToken: token } = useAuthState()
 
   const fetchUser = async () => {
     try {

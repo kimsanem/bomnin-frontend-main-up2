@@ -8,14 +8,14 @@ const route = useRoute();
 const config = useRuntimeConfig();
 const hasGoogleClientId = computed(() => !!config.public.googleClientId);
 
-const user = useCookie('user_data', { maxAge: 60 * 60 * 24 * 30, path: '/' });
-const authToken = useCookie('auth_token', { maxAge: 60 * 60 * 24 * 30, path: '/' });
+const { authToken, userData: user, clearAuth } = useAuthState();
 
 const isLoading = ref(false);
 const isLoginModalOpen = useState('loginModal', () => false);
 const isCheckingSession = ref(!!authToken.value && !user.value);
 const isEmbeddedBrowser = ref(false);
 const copiedBrowserLink = ref(false);
+const currentPageUrl = ref('/');
 const { theme, toggleTheme } = useTheme();
 
 const openLoginModal = () => isLoginModalOpen.value = true;
@@ -36,7 +36,7 @@ const copyCurrentUrl = async () => {
   if (typeof window === 'undefined' || !navigator?.clipboard) return;
 
   try {
-    await navigator.clipboard.writeText(window.location.href);
+    await navigator.clipboard.writeText(currentPageUrl.value);
     copiedBrowserLink.value = true;
     window.setTimeout(() => {
       copiedBrowserLink.value = false;
@@ -45,6 +45,30 @@ const copyCurrentUrl = async () => {
     console.error('មិនអាចចម្លងតំណភ្ជាប់បានទេ', error);
   }
 };
+
+const externalBrowserHref = computed(() => {
+  const url = currentPageUrl.value || '/';
+
+  if (typeof window === 'undefined') return url;
+
+  const ua = window.navigator.userAgent || '';
+  const isAndroid = /Android/i.test(ua);
+
+  if (!isAndroid) return url;
+
+  try {
+    const parsed = new URL(url);
+    const cleanPath = `${parsed.pathname}${parsed.search}${parsed.hash}`;
+    return `intent://${parsed.host}${cleanPath}#Intent;scheme=${parsed.protocol.replace(':', '')};package=com.android.chrome;end`;
+  } catch {
+    return url;
+  }
+});
+
+const externalBrowserLabel = computed(() => {
+  if (typeof window === 'undefined') return 'Open in Browser';
+  return /Android/i.test(window.navigator.userAgent || '') ? 'Open in Chrome' : 'Open in Safari';
+});
 
 const getOptimizedAvatar = (url, name) => {
   const defaultName = name || 'Guest';
@@ -64,27 +88,49 @@ const handleImageError = (event) => {
 
 onMounted(async () => {
   isEmbeddedBrowser.value = detectEmbeddedBrowser();
+  if (typeof window !== 'undefined') {
+    currentPageUrl.value = window.location.href;
+  }
 
   if (authToken.value) {
-    try {
+    let didSync = false;
+
+    const syncSession = async () => {
       const data = await $fetch(`${config.public.apiBase}/user`, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${authToken.value}`,
         },
       });
+
       if (data) {
         user.value = data;
+        didSync = true;
       }
+    };
+
+    try {
+      await syncSession();
     } catch (error) {
-      console.error('Session sync issue:', error);
-      if (error.response?.status === 401) {
-        authToken.value = null;
-        user.value = null;
+      console.warn('Session sync failed, retrying once...', error);
+
+      try {
+        await syncSession();
+      } catch (retryError) {
+        console.error('Session sync issue:', retryError);
+        if (retryError.response?.status === 401) {
+          clearAuth();
+        }
       }
     } finally {
       isCheckingSession.value = false;
+
+      if (!didSync && !user.value) {
+        isCheckingSession.value = false;
+      }
     }
+  } else {
+    isCheckingSession.value = false;
   }
 });
 
@@ -328,7 +374,7 @@ const isMenuItemActive = (to) => route.path === to;
                 </p>
                 <div class="mt-4 flex flex-col gap-2 sm:flex-row">
                   <a
-                    href="/"
+                    :href="externalBrowserHref"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="inline-flex items-center justify-center rounded-full bg-amber-500 px-4 py-2 text-sm font-bold text-slate-950 transition hover:bg-amber-400"

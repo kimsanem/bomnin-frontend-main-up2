@@ -9,8 +9,7 @@ const router = useRouter();
 
 const config    = useRuntimeConfig();
 const baseUrl   = config.public.apiBase;
-const authToken = useCookie('auth_token');
-const user      = useCookie('user_data');
+const { authToken, userData: user } = useAuthState();
 
 const isSubscribed = computed(() => user.value?.role === 'premium' || user.value?.role === 'admin');
 const slug = route.params.slug;
@@ -54,8 +53,6 @@ const { data: quizData, pending, error } = await useFetch(`${baseUrl}/quiz/${rou
     server: false,
     onResponseError({ response }) {
         if (response.status === 401) {
-            authToken.value = null;
-            user.value = null;
             isLoginModalOpen.value = true;
         }
     },

@@ -7,7 +7,7 @@ const props = defineProps({
 
 const emit = defineEmits(['accepted']);
 
-const user = useCookie('user_data', { maxAge: 60 * 60 * 24 * 30, path: '/' });
+const { userData: user } = useAuthState();
 const accepted = ref(false);
 const submitting = ref(false);
 const errorMsg = ref('');

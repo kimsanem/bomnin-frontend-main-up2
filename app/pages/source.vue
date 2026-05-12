@@ -14,7 +14,7 @@ const searchQuery = ref('');
 const config = useRuntimeConfig();
 const baseUrl = config.public.apiBase;
 
-const authToken = useCookie('auth_token');
+const { authToken } = useAuthState();
 const isLoginModalOpen = useState('loginModal');
 const openLoginModal = () => isLoginModalOpen.value = true;
 

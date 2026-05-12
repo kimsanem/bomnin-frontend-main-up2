@@ -17,8 +17,7 @@ useHead({
 
 const config    = useRuntimeConfig();
 const baseUrl   = config.public.apiBase; 
-const authToken = useCookie('auth_token');
-const userData  = useCookie('user_data');
+const { authToken, userData, clearAuth } = useAuthState();
 const router    = useRouter();
 
 const profileData  = ref(null);
@@ -84,8 +83,7 @@ const closeExpandedVideo = () => {
 };
 
 const handleSignOut = async () => {
-    authToken.value = null;
-    userData.value = null;
+    clearAuth();
     await router.push('/');
 };
 // ─────────────────────────────────────────────────────────────

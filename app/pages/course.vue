@@ -8,8 +8,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter(); 
 
 // --- USER STATE ---
-const user = useCookie('user_data', { maxAge: 60 * 60 * 24 * 30, path: '/' }); 
-const authToken = useCookie('auth_token', { maxAge: 60 * 60 * 24 * 30, path: '/' });
+const { userData: user, authToken } = useAuthState();
 
 const isEditingBio = ref(false);
 const newBio = ref('');

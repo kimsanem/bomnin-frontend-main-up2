@@ -8,8 +8,7 @@ import QuizExplanationModal from '@/components/QuizExplanationModal.vue';
 import QuizResultModal from '@/components/QuizResultModal.vue';
 
 const router = useRouter();
-const authToken = useCookie('auth_token');
-const user = useCookie('user_data'); 
+const { authToken, userData: user } = useAuthState();
 
 const config = useRuntimeConfig();
 const baseUrl = config.public.apiBase;
