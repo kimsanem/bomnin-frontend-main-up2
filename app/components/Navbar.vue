@@ -62,7 +62,7 @@ const copyCurrentUrl = async () => {
   }
 };
 
-const externalBrowserHref = computed(() => {
+const buildExternalBrowserHref = () => {
   const url = currentPageUrl.value || '/';
 
   if (typeof window === 'undefined') return url;
@@ -75,11 +75,21 @@ const externalBrowserHref = computed(() => {
   try {
     const parsed = new URL(url);
     const cleanPath = `${parsed.pathname}${parsed.search}${parsed.hash}`;
-    return `intent://${parsed.host}${cleanPath}#Intent;scheme=${parsed.protocol.replace(':', '')};package=com.android.chrome;end`;
+    const fallback = encodeURIComponent(url);
+    return `intent://${parsed.host}${cleanPath}#Intent;scheme=${parsed.protocol.replace(':', '')};package=com.android.chrome;S.browser_fallback_url=${fallback};end`;
   } catch {
     return url;
   }
-});
+};
+
+const externalBrowserHref = computed(() => buildExternalBrowserHref());
+
+const openInExternalBrowser = () => {
+  if (typeof window === 'undefined') return;
+
+  const target = buildExternalBrowserHref();
+  window.location.href = target;
+};
 
 const externalBrowserLabel = computed(() => {
   if (typeof window === 'undefined') return 'Open in Browser';
@@ -394,6 +404,7 @@ const isMenuItemActive = (to) => route.path === to;
                     :href="externalBrowserHref"
                     target="_blank"
                     rel="noopener noreferrer"
+                    @click.prevent="openInExternalBrowser"
                     class="inline-flex items-center justify-center rounded-full bg-amber-500 px-4 py-2 text-sm font-bold text-slate-950 transition hover:bg-amber-400"
                   >
                     បើកក្នុង Browser
