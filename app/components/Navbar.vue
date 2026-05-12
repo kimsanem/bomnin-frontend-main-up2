@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { isEmbeddedBrowserEnvironment } from '~/utils/browser';
+import { isEmbeddedBrowserEnvironment, isMobileBrowserEnvironment } from '~/utils/browser';
 
 const router = useRouter();
 const route = useRoute();
@@ -15,6 +15,7 @@ const isLoading = ref(false);
 const isLoginModalOpen = useState('loginModal', () => false);
 const isCheckingSession = ref(!!authToken.value && !user.value);
 const isEmbeddedBrowser = ref(false);
+const isMobileBrowser = ref(false);
 const copiedBrowserLink = ref(false);
 const currentPageUrl = ref('/');
 const { theme, toggleTheme } = useTheme();
@@ -33,6 +34,19 @@ const detectEmbeddedBrowser = () => {
     typeof document !== 'undefined' ? document.referrer : '',
   );
 };
+
+const detectMobileBrowser = () => {
+  if (typeof navigator === 'undefined') return false;
+  const uaMobile = isMobileBrowserEnvironment(navigator.userAgent || '');
+  const touchDevice = typeof window !== 'undefined'
+    && (window.navigator.maxTouchPoints > 0
+      || window.matchMedia?.('(pointer: coarse)').matches
+      || window.innerWidth < 1024);
+
+  return uaMobile || !!touchDevice;
+};
+
+const shouldAvoidGooglePopup = computed(() => isEmbeddedBrowser.value || isMobileBrowser.value);
 
 const copyCurrentUrl = async () => {
   if (typeof window === 'undefined' || !navigator?.clipboard) return;
@@ -90,6 +104,7 @@ const handleImageError = (event) => {
 
 onMounted(async () => {
   isEmbeddedBrowser.value = detectEmbeddedBrowser();
+  isMobileBrowser.value = detectMobileBrowser();
   if (typeof window !== 'undefined') {
     currentPageUrl.value = window.location.href;
   }
@@ -365,7 +380,7 @@ const isMenuItemActive = (to) => route.path === to;
               </div>
 
               <div
-                v-if="isEmbeddedBrowser"
+                v-if="shouldAvoidGooglePopup"
                 class="w-full rounded-2xl border border-amber-200 bg-amber-50 px-4 py-4 text-left dark:border-amber-300/25 dark:bg-amber-400/10"
               >
                 <p class="font-kantumruy text-sm font-bold text-amber-900 dark:text-amber-100">

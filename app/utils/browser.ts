@@ -12,3 +12,8 @@ export const isEmbeddedBrowserEnvironment = (
 
   return isExplicitInApp || isAndroidWebView || isIosInApp || hasInAppReferrer;
 };
+
+export const isMobileBrowserEnvironment = (userAgent?: string) => {
+  const ua = userAgent || '';
+  return /Android|iPhone|iPad|iPod|Mobile|CriOS|Chrome\/[\d.]+ Mobile|EdgiOS|FxiOS/i.test(ua);
+};
