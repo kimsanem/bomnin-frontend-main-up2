@@ -18,6 +18,8 @@ useHead({
 const config    = useRuntimeConfig();
 const baseUrl   = config.public.apiBase; 
 const authToken = useCookie('auth_token');
+const userData  = useCookie('user_data');
+const router    = useRouter();
 
 const profileData  = ref(null);
 const isLoading    = ref(true);
@@ -79,6 +81,12 @@ const openExpandedVideo = () => {
 
 const closeExpandedVideo = () => {
     isVideoExpanded.value = false;
+};
+
+const handleSignOut = async () => {
+    authToken.value = null;
+    userData.value = null;
+    await router.push('/');
 };
 // ─────────────────────────────────────────────────────────────
 
@@ -459,6 +467,22 @@ onUnmounted(stopTimers);
                 ការប្តេជ្ញាចិត្តដ៏មោះមុតបំផុតរបស់យើង គឺការរក្សានូវ «តម្លាភាព និងភាពត្រឹមត្រូវ» ជាដាច់ខាត ។ រាល់សំណួរ ចម្លើយ និង «ខ្លឹមសារសង្ខេប» ទាំងអស់នៅក្នុងប្រព័ន្ធនេះ មិនមែនជាការប្រឌិតឡើយ ប៉ុន្តែត្រូវបានចម្រាញ់ចេញពីឯកសារគោលនយោបាយ ច្បាប់ និងបទដ្ឋានយោងផ្លូវការដែលត្រូវបានផ្ទៀងផ្ទាត់យ៉ាងហ្មត់ចត់បំផុត។ យើងធានាជូននូវប្រភពឯកសារដែលច្បាស់លាស់ ដើម្បីឱ្យអ្នកសិក្សាទទួលបាននូវចំណេះដឹងដែលជាការពិត និងអាចយកទៅប្រើប្រាស់ជាផ្លូវការបានដោយទំនុកចិត្តខ្ពស់បំផុត។
               </p>
             </div>
+          </div>
+          <div class="flex justify-center px-2">
+            <button
+              type="button"
+              @click="handleSignOut"
+              class="group flex w-full max-w-4xl items-center justify-center gap-3 rounded-2xl border border-red-200 bg-white px-6 py-4 text-red-600 shadow-[0_18px_45px_rgba(239,68,68,0.1)] transition hover:-translate-y-0.5 hover:bg-red-50 hover:shadow-[0_24px_55px_rgba(239,68,68,0.16)] dark:border-red-400/20 dark:bg-slate-900/80 dark:text-red-300 dark:hover:bg-red-500/10"
+            >
+              <span class="flex h-10 w-10 items-center justify-center rounded-full bg-red-50 text-red-500 ring-1 ring-red-100 transition group-hover:bg-red-100 dark:bg-red-500/10 dark:text-red-300 dark:ring-red-400/20">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                  <path d="m16 17 5-5-5-5" />
+                  <path d="M21 12H9" />
+                </svg>
+              </span>
+              <span class="text-base font-bold">Logout</span>
+            </button>
           </div>
         </div>
       </div>

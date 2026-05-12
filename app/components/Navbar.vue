@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, onMounted, watch } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -11,7 +11,6 @@ const hasGoogleClientId = computed(() => !!config.public.googleClientId);
 const user = useCookie('user_data', { maxAge: 60 * 60 * 24 * 30, path: '/' });
 const authToken = useCookie('auth_token', { maxAge: 60 * 60 * 24 * 30, path: '/' });
 
-const isProfileMenuOpen = ref(false);
 const isLoading = ref(false);
 const isLoginModalOpen = useState('loginModal', () => false);
 const isCheckingSession = ref(!!authToken.value && !user.value);
@@ -21,21 +20,8 @@ const { theme, toggleTheme } = useTheme();
 
 const openLoginModal = () => isLoginModalOpen.value = true;
 const closeLoginModal = () => isLoginModalOpen.value = false;
-const toggleProfileMenu = () => isProfileMenuOpen.value = !isProfileMenuOpen.value;
-
-const handleSignOut = async () => {
-  authToken.value = null;
-  user.value = null;
-  isProfileMenuOpen.value = false;
-  await router.push('/');
-};
-
-const closeProfileMenu = () => {
-  isProfileMenuOpen.value = false;
-};
 
 const goToProfile = async () => {
-  isProfileMenuOpen.value = false;
   await router.push('/profile');
 };
 
@@ -129,18 +115,15 @@ const handleGoogleLoginSuccess = async (response) => {
 
 const menuItems = [
   { name: 'ទំព័រដើម', id: 'home', to: '/' },
-  { name: 'វិញ្ញាសាប្រឡងក្របខណ្ឌ', id: 'exam', to: '/exam' },
+  { name: 'ក្រសួងស្ថាប័នជាតិ', id: 'exam', to: '/exam' },
   { name: 'អនុវត្តប្រចាំថ្ងៃ', id: 'daily', to: '/daily' },
-  { name: 'ពិន្ទុសរុប', id: 'weekly', to: '/weekly' },
+  { name: 'បញ្ញវន្តសរុប', id: 'weekly', to: '/weekly' },
   { name: 'ប្រភពគោល', id: 'source', to: '/source' },
 
 ];
 
 const isMenuItemActive = (to) => route.path === to;
 
-watch(() => route.fullPath, () => {
-  closeProfileMenu();
-});
 </script>
 
 <template>
@@ -214,13 +197,13 @@ watch(() => route.fullPath, () => {
             <div v-if="isCheckingSession" class="h-10 w-10 animate-pulse rounded-full bg-blue-800/50 ring-1 ring-blue-700/40 md:h-11 md:w-11"></div>
 
             <div v-else-if="user" class="relative shrink-0">
-              <button @click="toggleProfileMenu" class="flex items-center gap-2 rounded-full focus:outline-none transition-transform hover:scale-105">
-                <div class="h-10 w-10 overflow-hidden rounded-full border-2 border-yellow-400 shadow-md md:h-11 md:w-11">
+              <button @click="goToProfile" class="flex items-center gap-2 rounded-full focus:outline-none transition-transform hover:scale-105">
+                <div class="h-10 w-10 overflow-hidden rounded-full border-2 border-yellow-400 shadow-[0_10px_24px_rgba(0,0,0,0.28),0_0_0_4px_rgba(250,204,21,0.12)] md:h-11 md:w-11 lg:h-14 lg:w-14 lg:shadow-[0_16px_34px_rgba(0,0,0,0.34),0_0_0_5px_rgba(250,204,21,0.16)]">
                   <img :src="getOptimizedAvatar(user?.avatar, user?.name)" @error="handleImageError" alt="Profile" class="h-full w-full object-cover bg-white" referrerpolicy="no-referrer">
                 </div>
               </button>
 
-              <div v-if="isProfileMenuOpen" @click.stop class="absolute right-0 mt-3 w-64 overflow-hidden rounded-2xl border border-white/20 bg-white/95 p-2 shadow-[0_24px_70px_rgba(15,23,42,0.24)] backdrop-blur-xl z-[160] animate-fade-in-up dark:border-white/10 dark:bg-slate-900/95 dark:shadow-[0_24px_70px_rgba(0,0,0,0.5)]">
+              <div v-if="false" @click.stop class="absolute right-0 mt-3 w-64 overflow-hidden rounded-2xl border border-white/20 bg-white/95 p-2 shadow-[0_24px_70px_rgba(15,23,42,0.24)] backdrop-blur-xl z-[160] animate-fade-in-up dark:border-white/10 dark:bg-slate-900/95 dark:shadow-[0_24px_70px_rgba(0,0,0,0.5)]">
                 <div class="rounded-xl bg-slate-50 px-3 py-3 dark:bg-white/5">
                   <p class="truncate text-sm font-extrabold text-slate-900 dark:text-slate-100">{{ user?.name }}</p>
                   <p class="mt-0.5 truncate text-xs font-medium text-slate-500 dark:text-slate-400">{{ user?.email }}</p>
@@ -242,7 +225,7 @@ watch(() => route.fullPath, () => {
                   <span>គណនីរបស់ខ្ញុំ</span>
                 </button>
 
-                <button type="button" @click="handleSignOut" class="group mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-bold text-red-600 transition hover:bg-red-50 font-siemreap dark:text-red-300 dark:hover:bg-red-500/10">
+                <button v-if="false" type="button" @click="handleSignOut" class="group mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-bold text-red-600 transition hover:bg-red-50 font-siemreap dark:text-red-300 dark:hover:bg-red-500/10">
                   <span class="flex h-8 w-8 items-center justify-center rounded-full bg-red-50 text-red-500 ring-1 ring-red-100 transition group-hover:bg-red-100 dark:bg-red-500/10 dark:text-red-300 dark:ring-red-400/20">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />

@@ -10,13 +10,13 @@ useHead({
       <div class="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <p class="font-kantumruy text-xs font-black uppercase tracking-[0.28em] text-amber-500 dark:text-amber-300">
-            Exam Center
+            NATIONAL AWARENESS CENTER
           </p>
           <h1 class="mt-2 font-kantumruy text-2xl font-black tracking-tight text-slate-950 md:text-4xl dark:text-white">
-            វិញ្ញាសាប្រឡងក្របខណ្ឌ
+           ទិន្នន័យជាតិ ពុទ្ធិជាតិ
           </h1>
           <p class="mt-3 max-w-2xl font-kantumruy text-sm leading-7 text-slate-500 md:text-base dark:text-slate-400">
-            ជ្រើសរើសក្រសួង ឬស្ថាប័ន ដើម្បីចាប់ផ្ដើមអនុវត្តវិញ្ញាសា
+            ថ្នាលក្រេបជញ្ជក់ចំណេះដឹង បង្កើនប្រាជ្ញា និងមូលដ្ឋានគ្រឹះសិក្សាអំពីកម្ពុជា ផ្អែកលើឯកសារជាតិជាគោល
           </p>
         </div>
 
