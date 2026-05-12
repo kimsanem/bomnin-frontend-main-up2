@@ -131,8 +131,11 @@ const isMenuItemActive = (to) => route.path === to;
     <nav class="relative z-[140] border-b border-blue-500/60 bg-[#1e3a8a] text-white shadow-[0_14px_40px_rgba(30,58,138,0.28)] dark:border-white/10 dark:bg-[#10245f] dark:shadow-[0_18px_48px_rgba(2,6,23,0.42)]">
       <div class="mx-auto flex max-w-[120rem] flex-wrap items-center justify-between gap-y-3 px-3 py-3 md:px-6 lg:flex-nowrap lg:gap-6 lg:px-8">
         <div class="order-1 flex shrink-0 items-center">
-          <NuxtLink to="/" class="flex h-14 items-center justify-center rounded-2xl px-2 transition-opacity hover:opacity-90 md:h-16 lg:h-[4.5rem]">
+          <NuxtLink to="/" class="flex flex-col items-center justify-center rounded-2xl px-2 py-1 text-center transition-opacity hover:opacity-90">
             <img src="/logo.png" alt="Logo" class="h-10 w-auto object-contain md:h-12 lg:h-[3.85rem]" />
+            <span class=" text-[8px] font-black uppercase tracking-[0.16em] text-white/90 sm:text-[9px] md:text-[10px]">
+              National Awareness
+            </span>
           </NuxtLink>
         </div>
 
