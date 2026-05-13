@@ -35,7 +35,7 @@ export default defineNuxtConfig({
     public: {
       googleClientId: process.env.GOOGLE_CLIENT_ID,
       apiBase: process.env.NUXT_PUBLIC_API_BASE,
-      aiBase: process.env.NUXT_PUBLIC_AI_BASE,
+      chatbotBase: process.env.NUXT_PUBLIC_CHATBOT_BASE,
     }
   }
 })
