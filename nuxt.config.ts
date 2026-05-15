@@ -35,7 +35,7 @@ export default defineNuxtConfig({
     public: {
       googleClientId: process.env.GOOGLE_CLIENT_ID,
       apiBase: process.env.NUXT_PUBLIC_API_BASE,
-      chatbotBase: process.env.NUXT_PUBLIC_CHATBOT_BASE,
+      chatbotBase: process.env.NUXT_PUBLIC_CHATBOT_BASE || 'https://bomnin-chatbot.onrender.com',
     }
   }
 })

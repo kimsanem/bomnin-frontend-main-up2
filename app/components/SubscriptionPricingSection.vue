@@ -8,6 +8,7 @@ type PricingPlan = {
   subtitle: string;
   price: string;
   period: string;
+  inlineNote?: string;
   title: string;
   badge?: string;
   badgeClass?: string;
@@ -26,6 +27,7 @@ const plans: PricingPlan[] = [
     name: 'មូលដ្ឋានគ្រឹះចំណេះទូទៅ',
     subtitle: 'Basic',
     price: '$2',
+    inlineNote: 'Keys & MCQs · 30,000+',
     period: '/ ខែ',
     title: 'Unlock មុំទាំង ១២',
     accent: 'from-emerald-400/30 via-emerald-300/10 to-transparent dark:from-emerald-500/12 dark:via-emerald-400/4 dark:to-transparent',
@@ -49,6 +51,7 @@ const plans: PricingPlan[] = [
     name: 'កម្ពុជា ក្រសួងស្ថាប័នរដ្ឋ',
     subtitle: 'Pro',
     price: '$3.5',
+    inlineNote: 'KEYs & MCQ : 50 000+',
     period: '/ ខែ',
     title: 'Unlock ៣៤ ក្រសួង-ស្ថាប័ន',
     accent: 'from-sky-400/30 via-sky-300/10 to-transparent dark:from-sky-500/12 dark:via-sky-400/4 dark:to-transparent',
@@ -71,6 +74,7 @@ const plans: PricingPlan[] = [
     name: 'ទិន្នន័យទាំងអស់',
     subtitle: 'Full Access',
     price: '$4',
+    inlineNote: 'KEYs & MCQ : 100 000+',
     period: '/ ខែ',
     title: 'Full Unlock',
     badge: 'Most Popular',
@@ -160,9 +164,15 @@ const plans: PricingPlan[] = [
               </div>
 
               <div class="relative mb-5">
-                <div class="flex items-end gap-2">
-                  <span class="text-3xl font-black tracking-tight text-indigo-600 dark:text-slate-100 sm:text-4xl lg:text-[2.6rem]">{{ plan.price }}</span>
-                  <span class="pb-0.5 font-kantumruy text-sm text-slate-500 dark:text-slate-400 sm:text-base">{{ plan.period }}</span>
+                <div class="flex items-center gap-1.5 whitespace-nowrap">
+                  <span class="text-3xl font-black leading-none tracking-tight text-indigo-600 dark:text-slate-100 sm:text-4xl lg:text-[2.6rem]">{{ plan.price }}</span>
+                  <span class="pt-2 font-kantumruy text-sm text-slate-500 dark:text-slate-400 sm:text-base">{{ plan.period }}</span>
+                  <span
+                    v-if="plan.inlineNote"
+                    class="ml-1 inline-flex shrink-0 items-center rounded-full border border-slate-300/80 bg-white/80 px-2 py-0.5 text-[10px] font-semibold tracking-[0.02em] text-slate-700 shadow-sm backdrop-blur-sm dark:border-white/10 dark:bg-white/5 dark:text-slate-200 sm:text-[11px]"
+                  >
+                    {{ plan.inlineNote }}
+                  </span>
                 </div>
                 <h3 class="mt-3 font-kantumruy text-xl font-black text-slate-900 dark:text-slate-100 sm:text-2xl">{{ plan.title }}</h3>
               </div>

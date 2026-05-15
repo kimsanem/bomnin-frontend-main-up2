@@ -2,7 +2,7 @@
 import { ref, nextTick, onMounted, computed, watch, onBeforeUnmount } from 'vue';
 
 const config = useRuntimeConfig();
-const chatbotBaseUrl = config.public.chatbotBase;
+const chatbotBaseUrl = (config.public.chatbotBase || 'https://bomnin-chatbot.onrender.com').replace(/\/$/, '');
 
 const { authToken } = useAuthState();
 const isLoggedIn = computed(() => !!authToken.value);
