@@ -27,7 +27,7 @@ const plans: PricingPlan[] = [
     name: 'មូលដ្ឋានគ្រឹះចំណេះទូទៅ',
     subtitle: 'Basic',
     price: '$2',
-    inlineNote: 'Keys & MCQs · 30,000+',
+    inlineNote: 'KEYs & MCQ : 30 000+',
     period: '/ ខែ',
     title: 'Unlock មុំទាំង ១២',
     accent: 'from-emerald-400/30 via-emerald-300/10 to-transparent dark:from-emerald-500/12 dark:via-emerald-400/4 dark:to-transparent',
@@ -123,32 +123,51 @@ const plans: PricingPlan[] = [
           class="group relative h-full overflow-hidden rounded-[1.65rem] p-[1px] transition-transform duration-300 hover:-translate-y-2"
           :class="
             plan.highlighted
-              ? 'bg-gradient-to-b from-violet-400 via-indigo-500 to-violet-600 shadow-[0_24px_60px_rgba(129,140,248,0.24)] dark:bg-gradient-to-b dark:from-violet-800 dark:via-violet-900 dark:to-[#140b2e] dark:shadow-[0_24px_80px_rgba(76,29,149,0.32)]'
-              : 'bg-white ring-1 ring-slate-300/85 shadow-[0_24px_60px_rgba(15,23,42,0.08)] dark:bg-white/10 dark:ring-0 dark:shadow-none'
+              ? 'bg-slate-300/80 shadow-[0_26px_70px_rgba(15,23,42,0.14)] dark:bg-[#4a4a45] dark:shadow-[0_26px_70px_rgba(15,23,42,0.24)]'
+              : plan.subtitle === 'Pro'
+                ? 'bg-sky-200/80 shadow-[0_24px_60px_rgba(15,23,42,0.10)] dark:bg-[#39536e] dark:shadow-[0_24px_60px_rgba(15,23,42,0.18)]'
+                : 'bg-emerald-200/80 shadow-[0_24px_60px_rgba(15,23,42,0.10)] dark:bg-[#2f4f53] dark:shadow-[0_24px_60px_rgba(15,23,42,0.18)]'
           "
         >
           <div
             class="relative flex h-full flex-col rounded-[calc(1.65rem-1px)] border border-slate-300/90 bg-white/95 p-4 shadow-[0_24px_60px_rgba(15,23,42,0.08)] backdrop-blur-md transition-colors duration-300 group-hover:border-slate-400 dark:border-white/10 dark:bg-slate-900/50 dark:shadow-none dark:backdrop-blur-xl dark:group-hover:border-white/20 sm:p-5 lg:p-6"
-            :class="plan.highlighted ? 'dark:bg-slate-950/30' : ''"
+            :class="
+              plan.highlighted
+                ? 'border-slate-300/90 bg-white/95 shadow-[0_20px_55px_rgba(15,23,42,0.08)] dark:border-white/10 dark:bg-[#2f302d] dark:shadow-[0_20px_55px_rgba(0,0,0,0.22)]'
+                : plan.subtitle === 'Pro'
+                  ? 'border-slate-300/90 bg-white/95 shadow-[0_20px_55px_rgba(15,23,42,0.08)] dark:border-white/10 dark:bg-[#2d4056] dark:shadow-[0_20px_55px_rgba(0,0,0,0.18)]'
+                  : 'border-slate-300/90 bg-white/95 shadow-[0_20px_55px_rgba(15,23,42,0.08)] dark:border-white/10 dark:bg-[#2a4247] dark:shadow-[0_20px_55px_rgba(0,0,0,0.18)]'
+            "
           >
             <div
               class="pointer-events-none absolute inset-0 rounded-[calc(1.65rem-1px)] bg-gradient-to-br opacity-80"
-              :class="plan.accent"
+              :class="
+                plan.highlighted
+                  ? 'from-transparent via-transparent to-transparent opacity-0'
+                  : plan.subtitle === 'Pro'
+                    ? 'from-sky-300/8 via-transparent to-sky-100/6 opacity-100'
+                    : 'from-emerald-300/8 via-transparent to-cyan-100/6 opacity-100'
+              "
             ></div>
             <div class="hidden"></div>
 
             <div class="relative flex h-full flex-col">
               <div class="mb-5 flex items-start justify-between gap-3">
                 <div>
-                  <p class="font-kantumruy text-sm font-bold text-slate-900 dark:text-slate-300">{{ plan.name }}</p>
+                  <p
+                    class="font-kantumruy text-sm font-bold text-slate-900 dark:text-slate-300"
+                    :class="plan.highlighted ? 'text-slate-900 dark:text-slate-200' : 'text-slate-900 dark:text-slate-100'"
+                  >
+                    {{ plan.name }}
+                  </p>
                   <span
                     class="mt-1 inline-flex rounded-full border px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.12em] sm:px-2.5 sm:py-0.5 sm:text-[10px]"
                     :class="
                       plan.highlighted
-                        ? 'border-violet-200 bg-violet-50 text-violet-700 dark:border-violet-300/25 dark:bg-violet-400/10 dark:text-violet-100'
+                        ? 'border-slate-300/90 bg-[#2d2d28] text-white dark:border-white/10 dark:bg-[#262723] dark:text-slate-200'
                         : plan.subtitle === 'Pro'
-                          ? 'border-sky-200 bg-sky-50 text-sky-700 dark:border-sky-400/20 dark:bg-sky-400/10 dark:text-sky-200'
-                          : 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-200'
+                          ? 'border-sky-300/80 bg-sky-50 text-sky-600 dark:border-sky-400/25 dark:bg-sky-500/10 dark:text-sky-200'
+                          : 'border-emerald-300/80 bg-emerald-50 text-emerald-600 dark:border-emerald-400/25 dark:bg-emerald-500/10 dark:text-emerald-200'
                     "
                   >
                     {{ plan.subtitle }}
@@ -156,28 +175,54 @@ const plans: PricingPlan[] = [
                 </div>
                 <span
                   v-if="plan.badge"
-                  class="pricing-badge relative overflow-hidden rounded-full border border-amber-300/80 bg-violet-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-700 shadow-[0_12px_26px_rgba(139,92,246,0.12)] dark:border-amber-300/55 dark:bg-violet-400/15 dark:text-violet-100 sm:text-xs"
+                  class="pricing-badge relative overflow-hidden rounded-full border border-green-400/50 bg-green-100 px-3 py-1 text-[10px] font-semibold tracking-[0.03em] text-green-700 shadow-[0_12px_26px_rgba(34,197,94,0.12)] dark:border-green-500/30 dark:bg-green-900/80 dark:text-green-300 dark:shadow-[0_12px_26px_rgba(34,197,94,0.18)] sm:text-xs"
                 >
                   <span class="relative z-10">{{ plan.badge }}</span>
-                  <span class="pricing-badge-glow absolute inset-y-0 -left-1/3 w-1/3 -skew-x-12 bg-white/35 dark:bg-amber-200/20"></span>
+                  <span class="pricing-badge-glow absolute inset-y-0 -left-1/3 w-1/3 -skew-x-12 bg-white/15 dark:bg-green-200/10"></span>
                 </span>
               </div>
 
-              <div class="relative mb-5">
+              <div
+                class="relative mb-5"
+                :class="plan.highlighted ? 'border-b border-slate-200/90 pb-6 dark:border-white/10' : 'border-b border-slate-200/90 pb-6 dark:border-white/10'"
+              >
                 <div class="flex items-center gap-1.5 whitespace-nowrap">
-                  <span class="text-3xl font-black leading-none tracking-tight text-indigo-600 dark:text-slate-100 sm:text-4xl lg:text-[2.6rem]">{{ plan.price }}</span>
-                  <span class="pt-2 font-kantumruy text-sm text-slate-500 dark:text-slate-400 sm:text-base">{{ plan.period }}</span>
+                  <span
+                    class="text-3xl font-black leading-none tracking-tight text-indigo-600 dark:text-slate-100 sm:text-4xl lg:text-[2.6rem]"
+                    :class="plan.highlighted ? 'text-slate-900 dark:text-white' : 'text-slate-900 dark:text-white'"
+                  >
+                    {{ plan.price }}
+                  </span>
+                  <span
+                    class="pt-2 font-kantumruy text-sm text-slate-500 dark:text-slate-400 sm:text-base"
+                    :class="plan.highlighted ? 'text-slate-500 dark:text-slate-300' : 'text-slate-500 dark:text-slate-300'"
+                  >
+                    {{ plan.period }}
+                  </span>
                   <span
                     v-if="plan.inlineNote"
-                    class="ml-1 inline-flex shrink-0 items-center rounded-full border border-slate-300/80 bg-white/80 px-2 py-0.5 text-[10px] font-semibold tracking-[0.02em] text-slate-700 shadow-sm backdrop-blur-sm dark:border-white/10 dark:bg-white/5 dark:text-slate-200 sm:text-[11px]"
+                    class="ml-auto inline-flex items-center rounded-full border px-2.5 py-1 text-[10px] font-semibold tracking-[0.02em] shadow-[0_12px_24px_rgba(59,130,246,0.22)] sm:text-[11px]"
+                    :class="
+                      plan.highlighted
+                        ? 'border-blue-400/20 bg-blue-900/70 text-blue-200'
+                        : 'border-blue-400/20 bg-blue-900/70 text-blue-200 dark:border-blue-400/20 dark:bg-blue-900/70 dark:text-blue-200'
+                    "
                   >
                     {{ plan.inlineNote }}
                   </span>
                 </div>
-                <h3 class="mt-3 font-kantumruy text-xl font-black text-slate-900 dark:text-slate-100 sm:text-2xl">{{ plan.title }}</h3>
+                <h3
+                  class="mt-3 font-kantumruy text-xl font-black text-slate-900 dark:text-slate-100 sm:text-2xl"
+                  :class="plan.highlighted ? 'text-slate-900 dark:text-white' : 'text-slate-900 dark:text-white'"
+                >
+                  {{ plan.title }}
+                </h3>
               </div>
 
-              <ul class="relative mb-6 space-y-3 rounded-2xl border border-slate-300/90 bg-slate-100/75 p-4 font-kantumruy text-[13px] leading-6 text-slate-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_12px_28px_rgba(15,23,42,0.05)] dark:border-transparent dark:bg-transparent dark:p-0 dark:text-slate-300 dark:shadow-none sm:text-sm">
+              <ul
+                class="relative mb-6 space-y-3 rounded-2xl border border-slate-300/90 bg-slate-100/75 p-4 font-kantumruy text-[13px] leading-6 text-slate-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_12px_28px_rgba(15,23,42,0.05)] dark:border-transparent dark:bg-transparent dark:p-0 dark:text-slate-300 dark:shadow-none sm:text-sm"
+                :class="plan.highlighted ? 'border-transparent bg-transparent p-0 text-slate-600 shadow-none dark:text-slate-300' : 'border-transparent bg-transparent p-0 text-slate-600 shadow-none dark:text-slate-300'"
+              >
                 <li
                   v-for="feature in plan.features"
                   :key="feature"
@@ -191,7 +236,11 @@ const plans: PricingPlan[] = [
               <button
                 type="button"
                 class="relative mt-auto inline-flex min-h-11 w-full items-center justify-center rounded-xl px-4 py-3 text-center font-kantumruy text-sm font-bold transition-all duration-300"
-                :class="plan.buttonClass"
+                :class="
+                  plan.highlighted
+                    ? 'border border-slate-200 bg-stone-100 text-slate-900 shadow-[0_12px_28px_rgba(15,23,42,0.08)] hover:bg-white dark:border-white/80 dark:shadow-[0_12px_28px_rgba(255,255,255,0.16)]'
+                    : 'border border-slate-300/90 bg-slate-50 text-slate-800 shadow-[0_12px_28px_rgba(15,23,42,0.06)] hover:bg-white dark:border-white/80 dark:bg-stone-100 dark:text-slate-900 dark:shadow-[0_12px_28px_rgba(255,255,255,0.14)] dark:hover:bg-white'
+                "
                 @click="openSubscribe"
               >
                 {{ plan.buttonLabel }}
