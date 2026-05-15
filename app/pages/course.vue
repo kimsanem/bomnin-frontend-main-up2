@@ -405,6 +405,18 @@ const avatarRingStyle = computed(() => {
     };
 });
 
+const profileHeaderMeta = computed(() => {
+    const rawId = user.value?.id;
+    const paddedId = rawId != null ? String(rawId).padStart(4, '0') : '0000';
+    const seasonYear = new Date().getFullYear();
+    return {
+        studentId: rawId ? `SCT-${seasonYear}-${paddedId}` : 'SCT-PENDING',
+        messageCount: 1,
+        messageLabel: 'Messages',
+        messageText: 'Notifications coming soon',
+    };
+});
+
 // Pulled from /user/profile-dashboard so it matches the user's position on
 // the monthly season leaderboard, not the frozen honor-roll snapshot.
 const currentUserRank = ref(null);
@@ -554,10 +566,32 @@ const { isPlaying, currentTrackIndex, playlist, toggleMusic, nextTrack, prevTrac
         <div class="h-28 bg-gradient-to-r from-[#2d0b0d] via-[#23070b] to-black relative backdrop-blur-sm">
             <img src="https://images.unsplash.com/photo-1515462277126-2dd0c162007a?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover opacity-35 mix-blend-overlay" alt="Banner">
             <div class="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.06),transparent_42%,rgba(96,165,250,0.12))]"></div>
+            <div class="absolute inset-x-0 top-0 z-20 flex items-start justify-between px-5 py-4 md:px-6 md:py-5">
+              <div class="inline-flex items-center rounded-full border border-white/12 bg-black/20 px-4 py-2 text-[11px] font-semibold tracking-[0.18em] text-white/95 shadow-[0_10px_28px_rgba(0,0,0,0.28)] backdrop-blur-md md:text-xs">
+                <span class="text-white/60">ID:</span>
+                <span class="ml-2">{{ profileHeaderMeta.studentId }}</span>
+              </div>
+
+              <button
+                type="button"
+                class="group/message relative inline-flex h-12 w-12 items-center justify-center rounded-[1.1rem] border border-amber-100/70 bg-[linear-gradient(180deg,#fcd34d_0%,#f59e0b_100%)] text-slate-950 shadow-[0_16px_28px_rgba(217,119,6,0.24),inset_0_1px_0_rgba(255,251,235,0.58)] transition-transform duration-300 hover:-translate-y-0.5"
+                :title="profileHeaderMeta.messageText"
+                aria-label="Messages placeholder"
+              >
+                <span class="absolute -right-1 -top-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-[#201624] bg-[#ff6b57] px-1 text-[10px] font-black text-white leading-none text-white shadow-[0_8px_18px_rgba(255,107,87,0.34)]">
+                  {{ profileHeaderMeta.messageCount }}
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 -rotate-6 transition-transform duration-300 group-hover/message:rotate-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M3 7.5 11.2 13a1.4 1.4 0 0 0 1.6 0L21 7.5" />
+                  <rect x="3" y="5" width="18" height="14" rx="3" />
+                  <path d="M18.5 3.5a4 4 0 0 1 2 3.5" />
+                  <path d="M5.5 3.5a4 4 0 0 0-2 3.5" />
+                </svg>
+              </button>
+            </div>
         </div>
 
         <div class="flex flex-col items-center -mt-12 px-5 md:px-6 py-6 md:py-7">
-          
           <div class="relative z-10 flex flex-col items-center pb-3">
              <div class="absolute bottom-0 left-1/2 z-20 -translate-x-1/2 translate-y-[4%] rounded-full border border-white/40 bg-slate-900/75 px-3 py-1 text-[11px] font-semibold tracking-[0.18em] text-white shadow-lg">
                 LV {{ treeProgress.current_level }}
